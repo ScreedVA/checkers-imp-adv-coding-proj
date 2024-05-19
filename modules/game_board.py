@@ -11,8 +11,9 @@ class GameBoard:
         self.__bc = black_checkers
         self.__wc = white_checkers
 
-    def post_init(self, image_handler):
+    def post_init(self, image_handler, game_controls):
         self.__img_h = image_handler
+        self.__gc = game_controls
     
 
     def get_board_size(self):
@@ -35,6 +36,7 @@ class GameBoard:
 
     
     def render_board(self, surface): 
+        surface.fill(self.get_bg_color())
         for i in range(32):
             row = i // 4
             column = i % 4
@@ -55,7 +57,9 @@ class GameBoard:
         """Draw border for captured men view"""
         draw.rect(surface, self.get_border_color(), [(self.__width * 0.8, 0),(self.__width * 0.2, self.__height * 0.8)], 3)
         self.render_pieces(surface)
-    
+        """Update selection displayed"""
+        self.__gc.render_selection(surface)
+
     def render_pieces(self, surface):
         """Render each pice onto the board when called"""
         for pos in self.__bc.get_pos():
