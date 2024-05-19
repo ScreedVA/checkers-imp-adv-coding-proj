@@ -8,5 +8,7 @@ class CheckerStatus:
     def get_pos(self):
         return self.__pos
     
+    
+    
 
 

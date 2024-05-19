@@ -58,7 +58,6 @@ class GameBoard:
         draw.rect(surface, self.get_border_color(), [(self.__width * 0.8, 0),(self.__width * 0.2, self.__height * 0.8)], 3)
         self.render_pieces(surface)
         """Update selection displayed"""
-        self.__gc.render_selection(surface)
 
     def render_pieces(self, surface):
         """Render each pice onto the board when called"""
