@@ -30,7 +30,12 @@ def start():
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 gc.select_cord = (event.pos[0] // gb.get_square_size(), event.pos[1] // gb.get_square_size())
-                
+                print(gc.current_player_cords)
+                print(gc.select_cord)
+                valid_options = gc.return_valid_options()
+                print(valid_options)
+                if gc.select_cord in valid_options:
+                    gc.current_player_cords[gc.return_selection()] = gc.select_cord
             if event.type == pygame.QUIT:
                 running = False
         
