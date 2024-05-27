@@ -28,6 +28,7 @@ def start():
     while running:
         gb.render_board(screen)
         gc.render_selection(screen)
+        # print(gc.return_valid_options())
 
         """Initialize variables in outer while loop"""
         selection = gc.return_selection()
@@ -36,36 +37,51 @@ def start():
         current_player = gc.get_current_player()
         valid_options = gc.return_valid_options()
         life_cycle_hook = gc.get_life_cycle_hook()
+        select_cord = gc.select_cord
+
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 clicked_cord = (event.pos[0] // gb.get_square_size(), event.pos[1] // gb.get_square_size())
                 gc.select_cord = clicked_cord
+                print(gc.check_options())
+                print(f"White Player Positions: {white_checkers.pos}")
+                print(f"Black Checker Positions: {black_checkers.pos}")
 
-                """Check if its is player 1's turn"""
+                """Check if its is player 1's turn to select"""
                 if current_player == "p1":
                     if clicked_cord in p1_cords:
                         gc.lch["p1"]["selected"] = True
                         gc.lch["p2"]["moved"] = False
 
+                """Check if player 1 has selected a piece and if player can move"""
                 if life_cycle_hook["p1"]["selected"]:
                     if gc.select_cord in  valid_options:
-                        r_d = (gc.select_cord[0] + 1, gc.select_cord[1] + 1)
-                        l_d = (gc.select_cord[0] - 1, gc.select_cord[1] + 1)
-                        r_t = (gc.select_cord[0] + 1, gc.select_cord[1] - 1)
-                        l_t = (gc.select_cord[0] - 1, gc.select_cord[1] - 1)
+                        """Initialize possible capture positions"""
+                        r_d =   (select_cord[0] + 1,  select_cord[1] + 1)
+                        l_d =   (select_cord[0] - 1,  select_cord[1] + 1)
+                        r_t =   (select_cord[0] + 1,  select_cord[1] - 1)
+                        l_t =   (select_cord[0] - 1,  select_cord[1] - 1)
+
+                        r_d_2x =   (select_cord[0] + 2,  select_cord[1] + 2)
+                        l_d_2x =   (select_cord[0] - 2,  select_cord[1] + 2)
+                        r_t_2x =   (select_cord[0] + 2,  select_cord[1] - 2)
+                        l_t_2x =   (select_cord[0] - 2,  select_cord[1] - 2)
+
 
                         """Check if player 1 can capture player 2's checkers"""
-                        if gc.select_cord[0] == black_checkers.pos[selection][0] + 2 or gc.select_cord[0] == black_checkers.pos[selection][0] - 2:
+                        if gc.select_cord[0] == black_checkers.pos[selection][0] + 2 or  gc.select_cord[0] == black_checkers.pos[selection][0] - 2:
                             for white_checker in white_checkers.pos:
-                                if white_checker == r_d or white_checker == l_d or white_checker == r_t or white_checker == l_t:
+                                """Search white checkers list for the piece to be captured"""
+                                if ((white_checker == r_d and gc.select_cord == r_d_2x) or (white_checker == l_d and gc.select_cord == l_d_2x) or (white_checker == r_t and gc.select_cord == r_t_2x) or (white_checker == l_t and gc.select_cord == l_t_2x)):
                                     black_checkers.captured_pieces_pos.append(white_checkers.pos.pop(white_checkers.pos.index(white_checker)))  
-                                    print(f"Captrued white checker: {white_checker}")         
-                                    print(f"All caputred white checkers: {black_checkers.captured_pieces_pos}")
+                                
+                                    # print(f"Captrued white checker: {white_checker}")         
+                                    # print(f"All caputred white checkers: {black_checkers.captured_pieces_pos}")
                         black_checkers.pos[selection] = clicked_cord
-                        gc.lch["p1"]["selected"] = False
                         gc.set_current_player("p2")
                         gc.lch["p1"]["moved"] = True
+                        gc.lch["p1"]["selected"] = False
 
                 """Check if its is player 2's turn"""
                 if current_player == "p2":
@@ -75,6 +91,27 @@ def start():
 
                 if life_cycle_hook["p2"]["selected"]:
                     if gc.select_cord in valid_options:
+                        """Initialize possible capture positions"""
+                        r_d = (select_cord[0] + 1,  select_cord[1] + 1)
+                        l_d = (select_cord[0] - 1,  select_cord[1] + 1)
+                        r_t = (select_cord[0] + 1,  select_cord[1] - 1)
+                        l_t = (select_cord[0] - 1,  select_cord[1] - 1)
+
+                        r_d_2x = (select_cord[0] + 2,  select_cord[1] + 2)
+                        l_d_2x = (select_cord[0] - 2,  select_cord[1] + 2)
+                        r_t_2x = (select_cord[0] + 2,  select_cord[1] - 2)
+                        l_t_2x = (select_cord[0] - 2,  select_cord[1] - 2)
+
+                        """Check if player 1 can capture player 2's checkers"""
+                        if gc.select_cord[0] == white_checkers.pos[selection][0] + 2 or  gc.select_cord[0] == white_checkers.pos[selection][0] - 2:
+                            for black_checker in black_checkers.pos:
+                                """Search black checkers list for the piece to be captured"""
+                                if ((black_checker == r_d and gc.select_cord == r_d_2x) or (black_checker == l_d and gc.select_cord == l_d_2x) or (black_checker == r_t and gc.select_cord == r_t_2x) or (black_checker == l_t and gc.select_cord == l_t_2x)):
+                                    black_checkers.captured_pieces_pos.append(black_checkers.pos.pop(black_checkers.pos.index(black_checker)))  
+
+                                    print(f"Captrued black checker: {black_checker}")         
+                                    print(f"All caputred black checkers: {black_checkers.captured_pieces_pos}")
+
                         white_checkers.pos[selection] = clicked_cord
                         gc.set_current_player("p1")
                         gc.lch["p2"]["moved"] = True
