@@ -23,20 +23,66 @@ def start():
     screen = pygame.display.set_mode(gb.get_board_size())
     clock = pygame.time.Clock()
     running = True
+    
 
     while running:
         gb.render_board(screen)
         gc.render_selection(screen)
+
+        """Initialize variables in outer while loop"""
+        selection = gc.return_selection()
+        p2_cords = gc.get_player_2_cords()
+        p1_cords = gc.get_player_1_cords()
+        current_player = gc.get_current_player()
+        valid_options = gc.return_valid_options()
+        life_cycle_hook = gc.get_life_cycle_hook()
+
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                gc.select_cord = (event.pos[0] // gb.get_square_size(), event.pos[1] // gb.get_square_size())
-                print(gc.current_player_cords)
-                print(gc.select_cord)
-                valid_options = gc.return_valid_options()
-                print(valid_options)
-                if gc.select_cord in valid_options:
-                    gc.current_player_cords[gc.return_selection()] = gc.select_cord
+                clicked_cord = (event.pos[0] // gb.get_square_size(), event.pos[1] // gb.get_square_size())
+                gc.select_cord = clicked_cord
+
+                """Check if its is player 1's turn"""
+                if current_player == "p1":
+                    if clicked_cord in p1_cords:
+                        gc.lch["p1"]["selected"] = True
+                        gc.lch["p2"]["moved"] = False
+
+                if life_cycle_hook["p1"]["selected"]:
+                    if gc.select_cord in  valid_options:
+                        r_d = (gc.select_cord[0] + 1, gc.select_cord[1] + 1)
+                        l_d = (gc.select_cord[0] - 1, gc.select_cord[1] + 1)
+                        r_t = (gc.select_cord[0] + 1, gc.select_cord[1] - 1)
+                        l_t = (gc.select_cord[0] - 1, gc.select_cord[1] - 1)
+
+                        """Check if player 1 can capture player 2's checkers"""
+                        if gc.select_cord[0] == black_checkers.pos[selection][0] + 2 or gc.select_cord[0] == black_checkers.pos[selection][0] - 2:
+                            for white_checker in white_checkers.pos:
+                                if white_checker == r_d or white_checker == l_d or white_checker == r_t or white_checker == l_t:
+                                    black_checkers.captured_pieces_pos.append(white_checkers.pos.pop(white_checkers.pos.index(white_checker)))  
+                                    print(f"Captrued white checker: {white_checker}")         
+                                    print(f"All caputred white checkers: {black_checkers.captured_pieces_pos}")
+                        black_checkers.pos[selection] = clicked_cord
+                        gc.lch["p1"]["selected"] = False
+                        gc.set_current_player("p2")
+                        gc.lch["p1"]["moved"] = True
+
+                """Check if its is player 2's turn"""
+                if current_player == "p2":
+                    if clicked_cord in p2_cords:
+                        gc.lch["p2"]["selected"] = True
+                        gc.lch["p1"]["moved"] = False
+
+                if life_cycle_hook["p2"]["selected"]:
+                    if gc.select_cord in valid_options:
+                        white_checkers.pos[selection] = clicked_cord
+                        gc.set_current_player("p1")
+                        gc.lch["p2"]["moved"] = True
+                        gc.lch["p2"]["selected"] = False
+
+
             if event.type == pygame.QUIT:
+
                 running = False
         
         pygame.display.flip()
@@ -45,10 +91,60 @@ def start():
 
     pygame.quit()
 
+def start_test():
+    pygame.init()
+    screen = pygame.display.set_mode(gb.get_board_size())
+    clock = pygame.time.Clock()
+    running = True
 
+    selected_piece = None
+    valid_moves = []
 
+    while running:
+        screen.fill(gb.get_bg_color())
+        gb.render_board(screen)
+        gc.render_selection(screen)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                # Get the clicked position
+                mouse_x, mouse_y = event.pos
+                square_x = mouse_x // gb.get_square_size()
+                square_y = mouse_y // gb.get_square_size()
+                clicked_cord = (square_x, square_y)
+
+                # If no piece is selected, try to select one
+                if selected_piece is None:
+                    if clicked_cord in gc.current_player_cords:
+                        selected_piece = clicked_cord
+                        gc.select_cord = selected_piece
+                        valid_moves = gc.return_valid_options()
+                else:
+                    # If a piece is selected, try to move it
+                    if clicked_cord in valid_moves:
+                        piece_index = gc.return_selection()
+                        if piece_index is not None:
+                            gc.current_player_cords[piece_index] = clicked_cord
+                            gc.update_player()
+                            selected_piece = None
+                            valid_moves = []
+                        else:
+                            selected_piece = None
+                            valid_moves = []
+                    else:
+                        selected_piece = None
+                        valid_moves = []
+        
+        pygame.display.flip()
+        clock.tick(60)
+
+    pygame.quit()
 
 if __name__ == "__main__":
     start()
+
+
 
 

@@ -32,7 +32,9 @@ class ImageHandler:
         mode = pil_image.mode
         size = pil_image.size
         data = pil_image.tobytes()
-
+        # print(f"Mode :{mode}")
+        # print(f"Size :{size}")
+        # print(f"Data :{data}")
         # Create a surface from the string data
         surface = image.fromstring(data, size, mode)
         return surface
