@@ -8,6 +8,8 @@ class GameControls:
         self.__players = {"p1": black_checkers, "p2": white_checkers}
         self.__player_1_cords = self.__players["p1"].get_pos()
         self.__player_2_cords = self.__players["p2"].get_pos()
+        self.__player_1_types = self.__players["p1"].all_pieces
+        self.__player_2_types = self.__players["p2"].all_pieces
         self.lch = {"p1": {"selected": False,"moved": False}, "p2": {"selected": False, "moved": False}}
         self.select_cord = None
         self.current_player_cords = self.__players[self.__current_player].get_pos()
@@ -40,14 +42,29 @@ class GameControls:
         all_moves = []
         moves_list = []
         if self.__current_player == "p1":
-            for cord in self.__player_1_cords:
-                moves_list = self.__check_men(cord)
-                all_moves.append(moves_list)
+            for i in range(len(self.__player_1_cords)):
+                # Check if black player(p1) piece is a man
+                if self.__player_1_types[i] == "man":
+                    moves_list = self.__check_men(self.__player_1_cords[i])
+                    all_moves.append(moves_list)
+                # check if black player(p1) piece is a king
+                elif self.__player_1_types[i] == "king":
+                    moves_list = self.__check_king(self.__player_1_cords[i])
+                    all_moves.append(moves_list)
+                # if self.__player_1_types[count] == "man":
+
 
         elif self.__current_player == "p2":
-            for cord in self.__player_2_cords:
-                moves_list = self.__check_men(cord)
-                all_moves.append(moves_list)
+            for i  in range(len(self.__player_2_cords)):
+                # Check if white player(p2) piece is a man
+                if self.__player_2_types[i] == "man":
+                    moves_list = self.__check_men(self.__player_2_cords[i])
+                    all_moves.append(moves_list)
+                # Check if white player(p2) piece is a king
+                elif self.__player_2_types[i] == "king":
+                    moves_list = self.__check_king(self.__player_2_cords[i])
+                    all_moves.append(moves_list)
+                     
             
         return all_moves
     
@@ -78,19 +95,61 @@ class GameControls:
                 l_t = (cord[0] - 1, cord[1] - 1)
                 r_t_2x = (cord[0] + 2, cord[1] - 2)
                 l_t_2x = (cord[0] - 2, cord[1] - 2)
-                if 0 <= cord[0] <= 7 and cord[1] <= 7:
+                if cord[0] <= 7 and cord[0] >= 0 and (cord[1] <= 7):
                     """Check if position at 1 right and 1 up is valid"""
                     if (r_t not in self.__player_2_cords) and (r_t not in self.__player_1_cords) and (0 <= (cord[0] + 1) <= 7):
                         moves_list.append(r_t)
                     """Check if position at 1 left and 1 up is valid"""
                     if (l_t not in self.__player_2_cords) and (l_t not in self.__player_1_cords) and (0 <= (cord[0] - 1) <= 7):
-                         moves_list.append(l_t)
+                            moves_list.append(l_t)
                     """Check if position at 2 right and 2 up is valid"""
                     if (r_t_2x not in self.__player_2_cords) and  (r_t_2x not in self.__player_1_cords) and (r_t not in self.__player_2_cords) and (0 <= cord[0] + 2 <= 7) and (r_t in self.__player_1_cords):
-                         moves_list.append(r_t_2x)
+                            moves_list.append(r_t_2x)
                     """Check if position at 2 left and 2 up is valid"""
                     if (l_t_2x not in self.__player_2_cords) and (l_t_2x not in self.__player_1_cords) and (l_t not in self.__player_2_cords) and (0 <= cord[0] - 2 <= 7) and (l_t in self.__player_1_cords):
                         moves_list.append(l_t_2x)
+        return moves_list
+
+    def __check_king(self, cord):
+        moves_list = self.__check_men(cord)
+        
+        if self.__current_player == "p1":
+                r_t = (cord[0] + 1, cord[1] - 1)
+                l_t = (cord[0] - 1, cord[1] - 1)
+                r_t_2x = (cord[0] + 2, cord[1] - 2)
+                l_t_2x = (cord[0] - 2, cord[1] - 2)
+                if (cord[0] <= 7) and (cord[0] >= 0) and (cord[1] <= 7):
+                    """Check if position at 1 right and 1 up is valid"""
+                    if (r_t not in self.__player_2_cords) and (r_t not in self.__player_1_cords) and (0 <= (cord[0] + 1) <= 7):
+                        moves_list.append(r_t)
+                    """Check if position at 1 left and 1 up is valid"""
+                    if (l_t not in self.__player_2_cords) and (l_t not in self.__player_1_cords) and (0 <= (cord[0] - 1) <= 7):
+                            moves_list.append(l_t)
+                    """Check if position at 2 right and 2 up is valid"""
+                    if (r_t_2x not in self.__player_2_cords) and  (r_t_2x not in self.__player_1_cords) and (r_t not in self.__player_1_cords) and (0 <= cord[0] + 2 <= 7) and (r_t in self.__player_2_cords):
+                            moves_list.append(r_t_2x)
+                    """Check if position at 2 left and 2 up is valid"""
+                    if (l_t_2x not in self.__player_2_cords) and (l_t_2x not in self.__player_1_cords) and (l_t not in self.__player_1_cords) and (0 <= cord[0] - 2 <= 7) and (l_t in self.__player_2_cords):
+                        moves_list.append(l_t_2x)
+
+        if self.__current_player == "p2":
+                r_d = (cord[0] + 1, cord[1] + 1)
+                l_d = (cord[0] - 1, cord[1] + 1)
+                r_d_2x = (cord[0] + 2, cord[1] + 2)
+                l_d_2x = (cord[0] - 2, cord[1] + 2)
+                if (0 <= cord[0] <= 7) and (cord[1] <= 7):
+                    """Check if position at 1 right and 1 down is valid"""
+                    if r_d not in self.__player_2_cords and r_d not in self.__player_1_cords and 0 <= cord[0] + 1 <= 7:
+                        moves_list.append(r_d)
+                    """Check if position at 1 left and 1 down is valid"""
+                    if l_d not in self.__player_2_cords and l_d not in self.__player_1_cords and 0 <= cord[0] - 1 <= 7:
+                         moves_list.append(l_d)
+                    """Check if position at 2 right and 2 down is valid"""
+                    if r_d_2x not in self.__player_1_cords and r_d_2x not in self.__player_2_cords and r_d not in self.__player_2_cords and 0 <= cord[0] + 2 <= 7 and r_d in self.__player_1_cords:
+                         moves_list.append(r_d_2x)
+                    """Check if position at 2 left and 2 down is valid"""
+                    if l_d_2x not in self.__player_1_cords and  l_d_2x not in self.__player_2_cords and l_d not in self.__player_2_cords and 0 <= cord[0] - 2 <= 7 and l_d in self.__player_1_cords:
+                        moves_list.append(l_d_2x)
         return moves_list
 
     def return_selection(self):
@@ -116,50 +175,6 @@ class GameControls:
               y = (cord[1] * self.__square_space[0]) + self.__square_space[0] / 2
               draw.circle(surface, self.__colors["indicator"], (x, y), 5)
         
-    def update_player(self):
-
-        if self.lch["p2"]["moved"]:
-             self.lch["p1"]["moved"] = not self.lch["p1"]["moved"]
-             self.lch["p2"]["selected"] = False
-             self.__current_player = "p1"
-
-        if self.lch["p1"]["moved"]:
-             self.lch["p2"]["moved"] = not self.lch["p2"]["moved"]
-             self.lch["p1"]["selected"] = False
-             self.__current_player = "p2"
-
-
-
-    # def handle_rotation(self, surface):
-    #     if self.__current_player == "p1":
-    #         self.render_selection(surface)
-    #         print(self.lch)
-    #         if self.return_selection():
-    #             print(self.current_player_cords[self.return_selection()])
-    #         if self.select_cord in self.current_player_cords:
-    #             self.lch["p1"]["selected"] = True
-    #         else:
-    #             self.lch["p1"]["selected"] = False
-
-    #         if self.select_cord in self.return_valid_options():
-    #             print("Can select from player 1")
-    #             self.current_player_cords[self.return_selection()] = self.select_cord
-    #             self.lch["p1"]["moved"] = True
-    #             self.update_player()
-        
-    #     elif self.__current_player == "p2":
-    #          self.render_selection(surface)
-    #          self.lch["p2"]["selected"] = True
-             
-    #          if self.lch["p2"]["selected"]:
-    #               if self.select_cord in self.return_valid_options():
-    #                    self.current_player_cords[self.return_selection()] = self.select_cord
-    #                    self.lch["p2"]["moved"] = True
-    #                    self.update_player()
-
-
-            
-             
 
     def get_player_2_cords(self):
         return self.__player_2_cords
