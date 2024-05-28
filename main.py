@@ -1,21 +1,24 @@
 import pygame
-from mypackage import CheckerStatus, GameBoard, GameControls, ImageHandler
+
+from mypackage import CheckerStatus, GameBoard, GameControls, ImageHandler, GameRecord
 # black_checker = pygame.transform.scale(pygame.Surface(img_h.get_black_checker()), (100, 100))
 
+g_r = GameRecord
+def main():
+    pass
 
 
+            
 
-
-
-def start():
+def start(b_pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1), (0, 2), (2, 2), (4, 2), (6, 2)], w_pos=[(1, 7), (3, 7), (5, 7), (7, 7), (0, 6), (2, 6), (4, 6), (6, 6), (1, 5), (3, 5), (5, 5), (7, 5)], b_types=["man"] * 12, w_types=["man"] * 12):
     pygame.init()
 
     SCREEN_WIDTH = 1000
     SCREEN_HEIGHT = 1000
 
     """Initializing Packages"""
-    black_checkers = CheckerStatus(pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1), (0, 2), (2, 2), (4, 2), (6, 2)])
-    white_checkers = CheckerStatus(pos=[(1, 7), (3, 7), (5, 7), (7, 7), (0, 6), (2, 6), (4, 6), (6, 6), (1, 5), (3, 5), (5, 5), (7, 5)])
+    black_checkers = CheckerStatus(b_pos, b_types)
+    white_checkers = CheckerStatus(w_pos, w_types)
     gb = GameBoard(black_checkers, white_checkers, SCREEN_WIDTH, SCREEN_HEIGHT, 0.5)
     img_h = ImageHandler((gb.get_square_space()))
     gc = GameControls(gb.get_square_space(), black_checkers, white_checkers)
@@ -139,9 +142,11 @@ def start():
         clock.tick(60)
 
     pygame.quit()
+    g_r.update_record(black_checkers.pos, white_checkers.pos, black_checkers.all_pieces, white_checkers.all_pieces)
 
 
 if __name__ == "__main__":
+    # generate_json()
     start()
 
 
