@@ -27,7 +27,6 @@ def main():
         # Checks if user wants to start a new round
         elif new_or_load == "N":
             print("Starting new round...")
-            time.sleep(1)
             start()
         # Checks if user made invalid input
         else:
@@ -113,7 +112,6 @@ def start(b_pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1),
                 # print(f"Selection cord after update: {gc.select_cord}")
                 # print(f"Valid options: {valid_options}")
 
-                print(gc.lch)
                 """Check if its is player 1's turn to select"""
                 if current_player == "p1":
                     if clicked_cord in p1_cords:

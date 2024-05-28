@@ -79,16 +79,16 @@ class GameControls:
                 l_d_2x = (cord[0] - 2, cord[1] + 2)
                 if 0 <= cord[0] <= 7 and cord[1] <= 7:
                     """Check if position at 1 right and 1 down is valid"""
-                    if r_d not in self.__player_2_cords and r_d not in self.__player_1_cords and 0 <= cord[0] + 1 <= 7:
+                    if (r_d not in self.__player_2_cords) and (r_d not in self.__player_1_cords) and (0 <= cord[0] + 1 <= 7) and (0 <= cord[1] + 1 <= 7):
                         moves_list.append(r_d)
                     """Check if position at 1 left and 1 down is valid"""
-                    if l_d not in self.__player_2_cords and l_d not in self.__player_1_cords and 0 <= cord[0] - 1 <= 7:
+                    if (l_d not in self.__player_2_cords) and (l_d not in self.__player_1_cords) and (0 <= cord[0] - 1 <= 7) and (0 <= cord[1] + 1 <= 7):
                          moves_list.append(l_d)
                     """Check if position at 2 right and 2 down is valid"""
-                    if r_d_2x not in self.__player_1_cords and r_d_2x not in self.__player_2_cords and r_d not in self.__player_1_cords and 0 <= cord[0] + 2 <= 7 and r_d in self.__player_2_cords:
+                    if (r_d_2x not in self.__player_1_cords) and (r_d_2x not in self.__player_2_cords) and (r_d not in self.__player_1_cords) and (0 <= cord[0] + 2 <= 7) and (0 <= cord[1] + 2 <= 7) and (r_d in self.__player_2_cords):
                          moves_list.append(r_d_2x)
                     """Check if position at 2 left and 2 down is valid"""
-                    if l_d_2x not in self.__player_1_cords and  l_d_2x not in self.__player_2_cords and l_d not in self.__player_1_cords and 0 <= cord[0] - 2 <= 7 and l_d in self.__player_2_cords:
+                    if (l_d_2x not in self.__player_1_cords) and  (l_d_2x not in self.__player_2_cords) and (l_d not in self.__player_1_cords) and (0 <= cord[0] - 2 <= 7) and (0 <= cord[1] + 2 <= 7) and (l_d in self.__player_2_cords):
                         moves_list.append(l_d_2x)
         
         
