@@ -115,7 +115,7 @@ class GameBoard:
     def render_winner(self, surface):
         dest = (self.__width * 0.05, self.__height * 0.3)
         if self.__gc.lch["winner"] == "black(p1)":
-            surface.blit(self.w_font.render("Black(P1) is the Winner", True, "orange"), dest)
+            surface.blit(self.w_font.render("Black(P1) is the Winner", True, "black"), dest)
         elif self.__gc.lch["winner"] == "white(p2)":
-            surface.blit(self.w_font.render("White(P2) is the Winner", True, "orange"), dest)
+            surface.blit(self.w_font.render("White(P2) is the Winner", True, "black"), dest)
         

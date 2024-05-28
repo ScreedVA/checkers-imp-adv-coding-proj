@@ -1,9 +1,11 @@
 import json
 
 class GameRecord:
+    def __init__(self) -> None:
+        self.__file_path = "game_record.json"
     
 
-    def update_record(b_c, w_c):
+    def update_record(self,b_c, w_c):
         """Will update the game record json file with the most recent game data"""
         data = {
             "pos": {
@@ -22,6 +24,21 @@ class GameRecord:
                 "b_capt_types": b_c.capt_types,
                 "w_capt_types": w_c.capt_types
             }
+            
         }
-        with open("game_record.json", "w") as f:
-            json.dump(data, f, indent=2, separators=(',', ':'))
+        with open(self.__file_path, "w") as f:
+            json.dump(data, f,  separators=(',', ':'))
+
+    def read_record(self):
+        try:
+            with open(self.__file_path, "r") as f:
+                data = json.load(f)
+                return data
+        except FileNotFoundError:
+            print(f"The file '{self.__file_path}' was not found")
+            return None
+        
+    def check_record(self):
+        if self.read_record():
+            return True
+        return False
