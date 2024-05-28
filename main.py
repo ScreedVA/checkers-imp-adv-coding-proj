@@ -1,24 +1,25 @@
-import modules
 import pygame
-
-"""Initializing Modules"""
-black_checkers = modules.CheckerStatus(pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1), (0, 2), (2, 2), (4, 2), (6, 2)])
-white_checkers = modules.CheckerStatus(pos=[(1, 7), (3, 7), (5, 7), (7, 7), (0, 6), (2, 6), (4, 6), (6, 6), (1, 5), (3, 5), (5, 5), (7, 5)])
-gb = modules.GameBoard(black_checkers, white_checkers, 0.5)
-img_h = modules.ImageHandler((gb.get_square_space()))
-gc = modules.GameControls(gb.get_square_space(), black_checkers, white_checkers)
-
-
-gb.post_init(image_handler=img_h, game_controls=gc)
+from mypackage import CheckerStatus, GameBoard, GameControls, ImageHandler
 # black_checker = pygame.transform.scale(pygame.Surface(img_h.get_black_checker()), (100, 100))
 
-        
+
+
 
 
 
 def start():
     pygame.init()
-    # - return blank screen
+
+    SCREEN_WIDTH = 1000
+    SCREEN_HEIGHT = 1000
+
+    """Initializing Packages"""
+    black_checkers = CheckerStatus(pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1), (0, 2), (2, 2), (4, 2), (6, 2)])
+    white_checkers = CheckerStatus(pos=[(1, 7), (3, 7), (5, 7), (7, 7), (0, 6), (2, 6), (4, 6), (6, 6), (1, 5), (3, 5), (5, 5), (7, 5)])
+    gb = GameBoard(black_checkers, white_checkers, SCREEN_WIDTH, SCREEN_HEIGHT, 0.5)
+    img_h = ImageHandler((gb.get_square_space()))
+    gc = GameControls(gb.get_square_space(), black_checkers, white_checkers)
+    gb.post_init(image_handler=img_h, game_controls=gc)
 
 
     screen = pygame.display.set_mode(gb.get_board_size())
@@ -29,6 +30,7 @@ def start():
     while running:
         gb.render_board(screen)
         gc.render_selection(screen)
+        gb.render_winner(screen)
 
         """Initialize variables in outer while loop"""
         selection = gc.return_selection()
@@ -76,11 +78,11 @@ def start():
                                 """Search white checkers list for the piece to be captured"""
                                 if ((white_checker == r_d and gc.select_cord == r_d_2x) or (white_checker == l_d and gc.select_cord == l_d_2x) or (white_checker == r_t and gc.select_cord == r_t_2x) or (white_checker == l_t and gc.select_cord == l_t_2x)):
                                     white_checker_index = white_checkers.pos.index(white_checker)
-                                    black_checkers.captured_pieces_pos.append(white_checkers.pos.pop(white_checker_index)) # Add white piece position to list of captured black pieces
-                                    black_checkers.captured_pieces_types.append(white_checkers.all_pieces.pop(white_checker_index))  # Add white piece type to list of captured black pieces
+                                    black_checkers.capt_pos.append(white_checkers.pos.pop(white_checker_index)) # Add white piece position to list of captured black pieces
+                                    black_checkers.capt_types.append(white_checkers.all_pieces.pop(white_checker_index))  # Add white piece type to list of captured black pieces
                                 
                                     print(f"Captrued white checker: {white_checker}")         
-                                    print(f"All caputred white checkers: {black_checkers.captured_pieces_pos}")
+                                    print(f"All caputred white checkers: {black_checkers.capt_pos}")
                         
                         black_checkers.pos[selection] = clicked_cord
                         """Check if black piece is able to become a king"""
@@ -115,8 +117,8 @@ def start():
                                 """Search black checkers list for the piece to be captured"""
                                 if ((black_checker == r_d and gc.select_cord == r_d_2x) or (black_checker == l_d and gc.select_cord == l_d_2x) or (black_checker == r_t and gc.select_cord == r_t_2x) or (black_checker == l_t and gc.select_cord == l_t_2x)):
                                     black_checker_index = black_checkers.pos.index(black_checker)
-                                    white_checkers.captured_pieces_pos.append(black_checkers.pos.pop(black_checker_index)) # Add black piece position to list of captured black pieces
-                                    white_checkers.captured_pieces_types.append(black_checkers.all_pieces.pop(black_checker_index))  # Add black piece type to list of captured black pieces
+                                    white_checkers.capt_pos.append(black_checkers.pos.pop(black_checker_index)) # Add black piece position to list of captured black pieces
+                                    white_checkers.capt_types.append(black_checkers.all_pieces.pop(black_checker_index))  # Add black piece type to list of captured black pieces
 
                                     
                         white_checkers.pos[selection] = clicked_cord
@@ -127,7 +129,7 @@ def start():
                         gc.lch["p2"]["moved"] = True
                         gc.lch["p2"]["selected"] = False
                 
-
+            gc.eval_winner()
             if event.type == pygame.QUIT:
 
                 running = False

@@ -1,4 +1,4 @@
-from pygame import draw
+from pygame import draw, font
 
 class GameControls:
     def __init__(self,  sqaure_space, black_checkers, white_checkers) -> None:
@@ -10,10 +10,10 @@ class GameControls:
         self.__player_2_cords = self.__players["p2"].get_pos()
         self.__player_1_types = self.__players["p1"].all_pieces
         self.__player_2_types = self.__players["p2"].all_pieces
-        self.lch = {"p1": {"selected": False,"moved": False}, "p2": {"selected": False, "moved": False}, "winner": None}
+        self.lch = {"p1": {"selected": False,"moved": False}, "p2": {"selected": False, "moved": True}, "winner": None}
         self.select_cord = None
         self.current_player_cords = self.__players[self.__current_player].get_pos()
-
+        self.font = font.Font("static/fonts/DaniloCatalina.ttf", )
     
     def render_selection(self,surface):
         if self.select_cord:
@@ -30,8 +30,6 @@ class GameControls:
                         self.__render_valid_options(surface)
                         pos = (self.select_cord[0] * self.__square_space[0], self.select_cord[1] * self.__square_space[0])
                         draw.rect(surface, self.__colors[self.__current_player], [pos, self.__square_space], 3)
-
-
 
     def set_current_player(self, player):
          self.__current_player = player
@@ -180,11 +178,13 @@ class GameControls:
               y = (cord[1] * self.__square_space[0]) + self.__square_space[0] / 2
               draw.circle(surface, self.__colors["indicator"], (x, y), 5)
     
-    # def check_winner(self):
-    #      if not self.__player_1_cords:
-    #           self.lch["winner"] = "White(p2)"
-    # elif not self.__player_2_cords:
-
+    def eval_winner(self):
+        if not self.__player_2_cords:
+            self.lch["winner"] = "black(p1)"
+        elif not self.__player_1_cords:
+            self.lch["winner"] = "white(p2)"
+    
+         
 
     def get_player_2_cords(self):
         return self.__player_2_cords
