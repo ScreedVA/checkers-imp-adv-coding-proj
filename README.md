@@ -10,7 +10,7 @@
 - Dependancies
 
 ## Introduction
-This project is comprised of 5 modules within the mypackage directory each responsible for handling thier respective features for the game, This project took around 20 - 25 hours to complete including research and experimentation into the pygame framework. This is my first time creating a project of this scale using pygame.
+This project is comprised of 5 modules within the mypackage directory each responsible for handling thier respective features for the game, This project took around 20 - 25 hours to complete including research and experimentation with the pygame framework. This is my first time creating a project of this scale using pygame.
 
 ## Features
 - Graphical User Interface
