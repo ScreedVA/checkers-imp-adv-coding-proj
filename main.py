@@ -9,12 +9,12 @@ def main():
     """Main menu interface prompts user to configure game settings"""
     # Checks if user has a previously saved game
     if g_r.check_record():
-        new_or_load = input("Would you like to load(L) your previous game or start a new game(N)").title()
+        new_or_load = input("\nWould you like to load(L) your previous game or start a new game(N)\n").title()
         # Checks if user wants to load previously saved round
         if new_or_load == "L":
             data = g_r.read_record()
             print("\nLoading previous round...")
-            time.sleep(3)
+            time.sleep(1)
             start(data["pos"]["black_pos"], 
                   data["pos"]["white_pos"], 
                   data["types"]["black_types"], 
@@ -26,15 +26,17 @@ def main():
                 )
         # Checks if user wants to start a new round
         elif new_or_load == "N":
+            print("Starting new round...")
+            time.sleep(1)
             start()
         # Checks if user made invalid input
         else:
             print(f"{new_or_load} is an invalid input, enter either L or N\n")
-            time.sleep(2)
+            time.sleep(1)
             main()
     else:
         print("You have no previous games, Starting round...")
-        time.sleep(3)
+        time.sleep(1)
         start()
 
 
