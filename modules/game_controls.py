@@ -10,19 +10,21 @@ class GameControls:
         self.__player_2_cords = self.__players["p2"].get_pos()
         self.__player_1_types = self.__players["p1"].all_pieces
         self.__player_2_types = self.__players["p2"].all_pieces
-        self.lch = {"p1": {"selected": False,"moved": False}, "p2": {"selected": False, "moved": False}}
+        self.lch = {"p1": {"selected": False,"moved": False}, "p2": {"selected": False, "moved": False}, "winner": None}
         self.select_cord = None
         self.current_player_cords = self.__players[self.__current_player].get_pos()
 
     
     def render_selection(self,surface):
         if self.select_cord:
+                """Check if player has selected a black(p1) piece when black is the current player"""
                 if self.__current_player == "p1":
                     if self.select_cord in self.__player_1_cords:
                         self.__render_valid_options(surface)
                         pos = (self.select_cord[0] * self.__square_space[0], self.select_cord[1] * self.__square_space[0])
                         draw.rect(surface, self.__colors[self.__current_player], [pos, self.__square_space], 3)
                 
+                """Check if player has selected a white(p2) piece when white is the current player"""
                 if self.__current_player == "p2":
                     if self.select_cord in self.__player_2_cords:
                         self.__render_valid_options(surface)
@@ -39,6 +41,7 @@ class GameControls:
 
 
     def check_options(self):
+        """Checks for all the possible moves for each piece of the current player"""
         all_moves = []
         moves_list = []
         if self.__current_player == "p1":
@@ -69,6 +72,7 @@ class GameControls:
         return all_moves
     
     def __check_men(self, cord):
+        """Checks and validates all possible moves for a given man piece"""
         moves_list = []
         if self.__current_player == "p1":
                 r_d = (cord[0] + 1, cord[1] + 1)
@@ -111,6 +115,7 @@ class GameControls:
         return moves_list
 
     def __check_king(self, cord):
+        """Checks and validates all possible moves for a given king piece"""
         moves_list = self.__check_men(cord)
         
         if self.__current_player == "p1":
@@ -119,16 +124,16 @@ class GameControls:
                 r_t_2x = (cord[0] + 2, cord[1] - 2)
                 l_t_2x = (cord[0] - 2, cord[1] - 2)
                 if (cord[0] <= 7) and (cord[0] >= 0) and (cord[1] <= 7):
-                    """Check if position at 1 right and 1 up is valid"""
+                    # Check if position at 1 right and 1 up is valid
                     if (r_t not in self.__player_2_cords) and (r_t not in self.__player_1_cords) and (0 <= (cord[0] + 1) <= 7):
                         moves_list.append(r_t)
-                    """Check if position at 1 left and 1 up is valid"""
+                    # Check if position at 1 left and 1 up is valid
                     if (l_t not in self.__player_2_cords) and (l_t not in self.__player_1_cords) and (0 <= (cord[0] - 1) <= 7):
                             moves_list.append(l_t)
-                    """Check if position at 2 right and 2 up is valid"""
+                    # Check if position at 2 right and 2 up is valid
                     if (r_t_2x not in self.__player_2_cords) and  (r_t_2x not in self.__player_1_cords) and (r_t not in self.__player_1_cords) and (0 <= cord[0] + 2 <= 7) and (r_t in self.__player_2_cords):
                             moves_list.append(r_t_2x)
-                    """Check if position at 2 left and 2 up is valid"""
+                    # Check if position at 2 left and 2 up is valid
                     if (l_t_2x not in self.__player_2_cords) and (l_t_2x not in self.__player_1_cords) and (l_t not in self.__player_1_cords) and (0 <= cord[0] - 2 <= 7) and (l_t in self.__player_2_cords):
                         moves_list.append(l_t_2x)
 
@@ -163,18 +168,23 @@ class GameControls:
         return None
 
     def return_valid_options(self):
-         """Return the player coordinates at the index of the click selection"""
-         if self.return_selection():
+         """Returns the player coordinates at the index of the click selection"""
+         if self.return_selection() is not None:
               return self.check_options()[self.return_selection()]
          return []
     
     def __render_valid_options(self, surface):
-         """Render a green circle indicator at each position in the valid options list"""
+         """Renders a green circle indicator at each position in the valid options list"""
          for cord in self.return_valid_options():
               x = (cord[0] * self.__square_space[0]) + self.__square_space[0] / 2
               y = (cord[1] * self.__square_space[0]) + self.__square_space[0] / 2
               draw.circle(surface, self.__colors["indicator"], (x, y), 5)
-        
+    
+    # def check_winner(self):
+    #      if not self.__player_1_cords:
+    #           self.lch["winner"] = "White(p2)"
+    # elif not self.__player_2_cords:
+
 
     def get_player_2_cords(self):
         return self.__player_2_cords

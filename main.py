@@ -3,7 +3,7 @@ import pygame
 
 """Initializing Modules"""
 black_checkers = modules.CheckerStatus(pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1), (0, 2), (2, 2), (4, 2), (6, 2)])
-white_checkers = modules.CheckerStatus(pos=[(1, 4), (3, 7), (5, 7), (7, 7), (0, 6), (2, 6), (4, 6), (6, 6), (1, 5), (3, 5), (5, 5), (7, 5)])
+white_checkers = modules.CheckerStatus(pos=[(1, 7), (3, 7), (5, 7), (7, 7), (0, 6), (2, 6), (4, 6), (6, 6), (1, 5), (3, 5), (5, 5), (7, 5)])
 gb = modules.GameBoard(black_checkers, white_checkers, 0.5)
 img_h = modules.ImageHandler((gb.get_square_space()))
 gc = modules.GameControls(gb.get_square_space(), black_checkers, white_checkers)
@@ -29,7 +29,6 @@ def start():
     while running:
         gb.render_board(screen)
         gc.render_selection(screen)
-        # print(gc.return_valid_options())
 
         """Initialize variables in outer while loop"""
         selection = gc.return_selection()
@@ -46,8 +45,9 @@ def start():
                 clicked_cord = (event.pos[0] // gb.get_square_size(), event.pos[1] // gb.get_square_size())
                 gc.select_cord = clicked_cord
 
-                print(gc.return_valid_options())
-                print(gc.select_cord)
+                print(f"All moves: {gc.check_options()}")
+                print(f"Current Moves: {gc.return_valid_options()}")
+                print(f"Selection index: {gc.return_selection()}")
 
                 """Check if its is player 1's turn to select"""
                 if current_player == "p1":
@@ -81,7 +81,9 @@ def start():
                                 
                                     print(f"Captrued white checker: {white_checker}")         
                                     print(f"All caputred white checkers: {black_checkers.captured_pieces_pos}")
+                        
                         black_checkers.pos[selection] = clicked_cord
+                        """Check if black piece is able to become a king"""
                         if black_checkers.pos[selection][1] == 7.0:
                             black_checkers.all_pieces[selection] = "king"
                         gc.set_current_player("p2")
@@ -107,7 +109,7 @@ def start():
                         r_t_2x = (select_cord[0] + 2,  select_cord[1] - 2)
                         l_t_2x = (select_cord[0] - 2,  select_cord[1] - 2)
 
-                        """Check if player 1 can capture player 2's checkers"""
+                        """Check if p2(white) can capture p1(black)'s pieces checkers"""
                         if gc.select_cord[0] == white_checkers.pos[selection][0] + 2 or  gc.select_cord[0] == white_checkers.pos[selection][0] - 2:
                             for black_checker in black_checkers.pos:
                                 """Search black checkers list for the piece to be captured"""
@@ -116,16 +118,15 @@ def start():
                                     white_checkers.captured_pieces_pos.append(black_checkers.pos.pop(black_checker_index)) # Add black piece position to list of captured black pieces
                                     white_checkers.captured_pieces_types.append(black_checkers.all_pieces.pop(black_checker_index))  # Add black piece type to list of captured black pieces
 
-                                    print(f"Captrued black checker: {black_checker}")         
-                                    print(f"All caputred black checkers: {white_checkers.captured_pieces_pos}")
-
+                                    
                         white_checkers.pos[selection] = clicked_cord
+                        # Check if white piece can become a king
                         if white_checkers.pos[selection][1] == 0:
                             white_checkers.all_pieces[selection] = "king"
                         gc.set_current_player("p1")
                         gc.lch["p2"]["moved"] = True
                         gc.lch["p2"]["selected"] = False
-
+                
 
             if event.type == pygame.QUIT:
 
