@@ -1,8 +1,9 @@
 from pygame import draw, Rect, font
 font.init()
 class GameBoard:
+    """Class to handle game board functionality"""
     def __init__(self, black_checkers, white_checkers, width, height, diff=1) -> None:
-        """Initializes default board settings"""
+        """Initializes default game board settings"""
         self.__width = width * diff
         self.__height = height * diff
         self.__colors = {"bg": "#ffe4ba", 
@@ -19,36 +20,44 @@ class GameBoard:
     
 
     def get_board_size(self):
+        """Getter which returns size of game board"""
         return (self.__width, self.__height)
         
     def get_bg_color(self):
+        """Getter which returns background color from colors dictionary"""
         return self.__colors["bg"]
     
     def get_square_color(self):
+        """Getter which returns the square color from colors dictionary"""
         return self.__colors["square"]
 
     def get_border_color(self):
+        """Getter which returns the border color from colors dictionary"""
         return self.__colors["border"]
 
     def get_square_space(self):
+        """Getter which returns the width and height of the board squares in a tuple"""
         return (self.get_square_size(), self.get_square_size())
     
     def get_square_size(self):
+        """Getter which returns the width of the board squares"""
         return (self.__width // 10)
 
     
     def render_board(self, surface): 
+        """Renders 32 squares squares, 9 vertical and 9 horizontal lines onto the screen
+        (excecutes render_pieces(), render_game_status() and render_captures() functions)"""
         surface.fill(self.get_bg_color())
         for i in range(32):
-            row = i // 4
-            column = i % 4
-            diff = column * (self.get_square_size() * 2) # diff = (0 -> 200 -> 400 -> 600)
-            if row % 2 == 0:
-                """Draw gray square when row = (0 -> 2 -> 4 -> 6)"""
-                draw.rect(surface, self.get_square_color(), [((self.__width * 0.6 - diff), (row * self.get_square_size())), self.get_square_space()])
+            y = i // 4
+            x = i % 4
+            diff = x * (self.get_square_size() * 2) # diff = (0 -> 200 -> 400 -> 600)
+            if y % 2 == 0:
+                """Draw gray square when y = (0 -> 2 -> 4 -> 6)"""
+                draw.rect(surface, self.get_square_color(), [((self.__width * 0.6 - diff), (y * self.get_square_size())), self.get_square_space()])
             else:
-                """Draw gray square when row =(1 -> 3 -> 5 -> 7)"""
-                draw.rect(surface, self.get_square_color(), [((self.__width * 0.7 - diff), (row * self.get_square_size())), self.get_square_space()])
+                """Draw gray square when y =(1 -> 3 -> 5 -> 7)"""
+                draw.rect(surface, self.get_square_color(), [((self.__width * 0.7 - diff), (y * self.get_square_size())), self.get_square_space()])
         for i in range(9):
             """Draw horizontal border lines"""
             draw.line(surface, self.get_border_color(), (0, i * self.get_square_size()), (self.__width * 0.8, i * self.get_square_size()))
@@ -66,7 +75,7 @@ class GameBoard:
         self.render_captured(surface)
 
     def render_pieces(self, surface):
-        """Render each pice onto the board when called"""
+        """Renders each piece in CheckStatus.pos object lists onto the board when called"""
         for i in range(len(self.__bc.get_pos())):
             # Check if black piece is a man
             if self.__bc.types[i] == "man":
@@ -113,6 +122,7 @@ class GameBoard:
                 surface.blit(self.__img_h.get_black_king("small"), (self.__width * 0.9, i * self.get_square_size() // 2))
         
     def render_winner(self, surface):
+        """Renders winning text when life cycle hook detects a winner"""
         dest = (self.__width * 0.05, self.__height * 0.3)
         if self.__gc.lch["winner"] == "black(p1)":
             surface.blit(self.w_font.render("Black(P1) is the Winner", True, "black"), dest)

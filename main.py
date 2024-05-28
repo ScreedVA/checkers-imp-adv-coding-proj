@@ -14,7 +14,6 @@ def main():
         if new_or_load == "L":
             data = g_r.read_record()
             print("\nLoading previous round...")
-            time.sleep(1)
             start(data["pos"]["black_pos"], 
                   data["pos"]["white_pos"], 
                   data["types"]["black_types"], 
@@ -26,16 +25,15 @@ def main():
                 )
         # Checks if user wants to start a new round
         elif new_or_load == "N":
-            print("Starting new round...")
+            print("\nStarting new round...")
             start()
         # Checks if user made invalid input
         else:
-            print(f"{new_or_load} is an invalid input, enter either L or N\n")
+            print(f"'{new_or_load}' is an invalid input, enter either L or N\n")
             time.sleep(1)
             main()
     else:
         print("You have no previous games, Starting round...")
-        time.sleep(1)
         start()
 
 
@@ -49,6 +47,7 @@ def start(b_pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1),
           w_capt_pos=[],
           b_capt_types=[],
           w_capt_types=[]):
+    
     pygame.init()
     pygame.display.set_caption("Checkers - Advanced Coding Project")
 
@@ -58,7 +57,7 @@ def start(b_pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1),
     """Initializing Packages"""
     black_checkers = CheckerStatus(b_pos, b_types, b_capt_pos, b_capt_types)
     white_checkers = CheckerStatus(w_pos, w_types, w_capt_pos, w_capt_types)
-    gb = GameBoard(black_checkers, white_checkers, SCREEN_WIDTH, SCREEN_HEIGHT, 0.5)
+    gb = GameBoard(black_checkers, white_checkers, SCREEN_WIDTH, SCREEN_HEIGHT, 0.45)
     img_h = ImageHandler((gb.get_square_space()))
     gc = GameControls(gb.get_square_space(), black_checkers, white_checkers)
     gb.post_init(image_handler=img_h, game_controls=gc)
@@ -89,28 +88,25 @@ def start(b_pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1),
                 clicked_cord = (event.pos[0] // gb.get_square_size(), event.pos[1] // gb.get_square_size())
                 gc.select_cord = clicked_cord
 
-
-                # print(f"Black piece positions: {black_checkers.pos}")
-                # print(f"Black piece types: {black_checkers.types}")
-                # print(f"Black has captured(pos): {black_checkers.capt_pos}")
-                # print(f"Black has captured(type){black_checkers.capt_types}")
-                
-                # print(gc.select_cord)
-                # print(gc.return_selection())
-                # print(gc.get_current_player())
-
-
-                # print(f"Clicked coordinates: {clicked_cord}")
-                # print(f"Current player: {current_player}")
-                # print(f"Selection before update: {selection}")
-                # print(f"Selection Cord before update: {select_cord}")
-            
-                # print(f"Player 1 coordinates: {p1_cords}")
-                # print(f"Player 2 coordinates: {p2_cords}")
-
-                # print(f"Selection after update: {gc.return_selection()}")
-                # print(f"Selection cord after update: {gc.select_cord}")
-                # print(f"Valid options: {valid_options}")
+                """ ---------- UNCOMMENT TO DEBUG ---------- """
+                print("\n\n")
+                print("<----- DEBUG STATEMENTS ----->")
+                print("\n\n")
+                print(f"Black piece positions: {black_checkers.pos}")
+                print(f"Black piece types: {black_checkers.types}")
+                print(f"Black has captured(pos): {black_checkers.capt_pos}")
+                print(f"Black has captured(type){black_checkers.capt_types}")
+                print("\n")
+                print(f"White piece positions: {white_checkers.pos}")
+                print(f"White piece types: {white_checkers.types}")
+                print(f"White has captured(pos): {white_checkers.capt_pos}")
+                print(f"White has captured(type){white_checkers.capt_types}")
+                print("\n")
+                print(f"Selection coordinates (previous): {select_cord}")
+                print(f"Selection coordinates (current): {gc.select_cord}")
+                print("\n\n")
+                print("<----- DEBUG STATEMENTS ----->")
+                """ ---------- UNCOMMENT TO DEBUG ---------- """
 
                 """Check if its is player 1's turn to select"""
                 if current_player == "p1":
@@ -180,7 +176,7 @@ def start(b_pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1),
 
                                     
                         white_checkers.pos[selection] = clicked_cord
-                        # Check if white piece can become a king
+                        """Check if white piece can become a king"""
                         if white_checkers.pos[selection][1] == 0:
                             white_checkers.types[selection] = "king"
                         gc.set_current_player("p1")

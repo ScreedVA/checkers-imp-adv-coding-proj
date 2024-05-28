@@ -1,7 +1,9 @@
 import json
 
 class GameRecord:
+    """Class which handles json game data"""
     def __init__(self) -> None:
+        """Initiliazes GameRecord variables"""
         self.__file_path = "game_record.json"
     
 
@@ -30,15 +32,17 @@ class GameRecord:
             json.dump(data, f,  separators=(',', ':'))
 
     def read_record(self):
+        """Returns previous game data or none"""
         try:
             with open(self.__file_path, "r") as f:
                 data = json.load(f)
                 return data
         except FileNotFoundError:
-            print(f"The file '{self.__file_path}' was not found")
+            # print(f"The file '{self.__file_path}' was not found")
             return None
         
     def check_record(self):
+        """Returns true if previous game data exists"""
         if self.read_record():
             return True
         return False

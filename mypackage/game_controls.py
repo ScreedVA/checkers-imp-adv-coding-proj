@@ -1,7 +1,9 @@
 from pygame import draw, font
 
 class GameControls:
+    """Class to control game logic, turn handling and behaviour"""
     def __init__(self,  sqaure_space, black_checkers, white_checkers) -> None:
+        """Initiliazes default game control settings"""
         self.__square_space = sqaure_space
         self.__colors = {"p1": "#d70000", "p2": "#0229bf", "indicator":"#2db83d"}
         self.__current_player = "p1"
@@ -32,9 +34,11 @@ class GameControls:
                         draw.rect(surface, self.__colors[self.__current_player], [pos, self.__square_space], 3)
 
     def set_current_player(self, player):
+         """Setter for current player"""
          self.__current_player = player
 
     def get_current_player(self):
+        """Getter for current player"""
         return self.__current_player
 
 
@@ -52,7 +56,6 @@ class GameControls:
                 elif self.__player_1_types[i] == "king":
                     moves_list = self.__check_king(self.__player_1_cords[i])
                     all_moves.append(moves_list)
-                # if self.__player_1_types[count] == "man":
 
 
         elif self.__current_player == "p2":
@@ -78,16 +81,16 @@ class GameControls:
                 r_d_2x = (cord[0] + 2, cord[1] + 2)
                 l_d_2x = (cord[0] - 2, cord[1] + 2)
                 if 0 <= cord[0] <= 7 and cord[1] <= 7:
-                    """Check if position at 1 right and 1 down is valid"""
+                    # Check if position at 1 right and 1 down is valid
                     if (r_d not in self.__player_2_cords) and (r_d not in self.__player_1_cords) and (0 <= cord[0] + 1 <= 7) and (0 <= cord[1] + 1 <= 7):
                         moves_list.append(r_d)
-                    """Check if position at 1 left and 1 down is valid"""
+                    # Check if position at 1 left and 1 down is valid
                     if (l_d not in self.__player_2_cords) and (l_d not in self.__player_1_cords) and (0 <= cord[0] - 1 <= 7) and (0 <= cord[1] + 1 <= 7):
                          moves_list.append(l_d)
-                    """Check if position at 2 right and 2 down is valid"""
+                    # Check if position at 2 right and 2 down is valid
                     if (r_d_2x not in self.__player_1_cords) and (r_d_2x not in self.__player_2_cords) and (r_d not in self.__player_1_cords) and (0 <= cord[0] + 2 <= 7) and (0 <= cord[1] + 2 <= 7) and (r_d in self.__player_2_cords):
                          moves_list.append(r_d_2x)
-                    """Check if position at 2 left and 2 down is valid"""
+                    # Check if position at 2 left and 2 down is valid
                     if (l_d_2x not in self.__player_1_cords) and  (l_d_2x not in self.__player_2_cords) and (l_d not in self.__player_1_cords) and (0 <= cord[0] - 2 <= 7) and (0 <= cord[1] + 2 <= 7) and (l_d in self.__player_2_cords):
                         moves_list.append(l_d_2x)
         
@@ -98,16 +101,16 @@ class GameControls:
                 r_t_2x = (cord[0] + 2, cord[1] - 2)
                 l_t_2x = (cord[0] - 2, cord[1] - 2)
                 if cord[0] <= 7 and cord[0] >= 0 and (cord[1] <= 7):
-                    """Check if position at 1 right and 1 up is valid"""
+                    # Check if position at 1 right and 1 up is valid
                     if (r_t not in self.__player_2_cords) and (r_t not in self.__player_1_cords) and (0 <= (cord[0] + 1) <= 7):
                         moves_list.append(r_t)
-                    """Check if position at 1 left and 1 up is valid"""
+                    # Check if position at 1 left and 1 up is valid
                     if (l_t not in self.__player_2_cords) and (l_t not in self.__player_1_cords) and (0 <= (cord[0] - 1) <= 7):
                             moves_list.append(l_t)
-                    """Check if position at 2 right and 2 up is valid"""
+                    # Check if position at 2 right and 2 up is valid
                     if (r_t_2x not in self.__player_2_cords) and  (r_t_2x not in self.__player_1_cords) and (r_t not in self.__player_2_cords) and (0 <= cord[0] + 2 <= 7) and (r_t in self.__player_1_cords):
                             moves_list.append(r_t_2x)
-                    """Check if position at 2 left and 2 up is valid"""
+                    # Check if position at 2 left and 2 up is valid
                     if (l_t_2x not in self.__player_2_cords) and (l_t_2x not in self.__player_1_cords) and (l_t not in self.__player_2_cords) and (0 <= cord[0] - 2 <= 7) and (l_t in self.__player_1_cords):
                         moves_list.append(l_t_2x)
         return moves_list
@@ -141,25 +144,27 @@ class GameControls:
                 r_d_2x = (cord[0] + 2, cord[1] + 2)
                 l_d_2x = (cord[0] - 2, cord[1] + 2)
                 if (0 <= cord[0] <= 7) and (cord[1] <= 7):
-                    """Check if position at 1 right and 1 down is valid"""
+                    # Check if position at 1 right and 1 down is valid
                     if r_d not in self.__player_2_cords and r_d not in self.__player_1_cords and 0 <= cord[0] + 1 <= 7:
                         moves_list.append(r_d)
-                    """Check if position at 1 left and 1 down is valid"""
+                    # Check if position at 1 left and 1 down is valid
                     if l_d not in self.__player_2_cords and l_d not in self.__player_1_cords and 0 <= cord[0] - 1 <= 7:
                          moves_list.append(l_d)
-                    """Check if position at 2 right and 2 down is valid"""
+                    # Check if position at 2 right and 2 down is valid
                     if r_d_2x not in self.__player_1_cords and r_d_2x not in self.__player_2_cords and r_d not in self.__player_2_cords and 0 <= cord[0] + 2 <= 7 and r_d in self.__player_1_cords:
                          moves_list.append(r_d_2x)
-                    """Check if position at 2 left and 2 down is valid"""
+                    # Check if position at 2 left and 2 down is valid
                     if l_d_2x not in self.__player_1_cords and  l_d_2x not in self.__player_2_cords and l_d not in self.__player_2_cords and 0 <= cord[0] - 2 <= 7 and l_d in self.__player_1_cords:
                         moves_list.append(l_d_2x)
         return moves_list
 
     def return_selection(self):
-        """Return the click selection if it is current_player_cords"""
+        """Return the click selection index if it is current_player_cords list"""
+        # Checks if current player is player 1
         if self.__current_player == "p1":
             if self.select_cord in self.__player_1_cords:
                 return self.__player_1_cords.index(self.select_cord)
+        # Checks if current player is player 2
         elif self.__current_player == "p2":
             if self.select_cord in self.__player_2_cords:
                 return self.__player_2_cords.index(self.select_cord)
@@ -179,6 +184,7 @@ class GameControls:
               draw.circle(surface, self.__colors["indicator"], (x, y), 5)
     
     def eval_winner(self):
+        """Checks for a winning player on every game loop"""
         if not self.__player_2_cords:
             self.lch["winner"] = "black(p1)"
         elif not self.__player_1_cords:
