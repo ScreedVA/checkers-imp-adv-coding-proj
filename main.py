@@ -82,7 +82,7 @@ def start(b_pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1),
                                 if ((white_checker == r_d and gc.select_cord == r_d_2x) or (white_checker == l_d and gc.select_cord == l_d_2x) or (white_checker == r_t and gc.select_cord == r_t_2x) or (white_checker == l_t and gc.select_cord == l_t_2x)):
                                     white_checker_index = white_checkers.pos.index(white_checker)
                                     black_checkers.capt_pos.append(white_checkers.pos.pop(white_checker_index)) # Add white piece position to list of captured black pieces
-                                    black_checkers.capt_types.append(white_checkers.all_pieces.pop(white_checker_index))  # Add white piece type to list of captured black pieces
+                                    black_checkers.capt_types.append(white_checkers.types.pop(white_checker_index))  # Add white piece type to list of captured black pieces
                                 
                                     print(f"Captrued white checker: {white_checker}")         
                                     print(f"All caputred white checkers: {black_checkers.capt_pos}")
@@ -90,7 +90,7 @@ def start(b_pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1),
                         black_checkers.pos[selection] = clicked_cord
                         """Check if black piece is able to become a king"""
                         if black_checkers.pos[selection][1] == 7.0:
-                            black_checkers.all_pieces[selection] = "king"
+                            black_checkers.types[selection] = "king"
                         gc.set_current_player("p2")
                         gc.lch["p1"]["moved"] = True
                         gc.lch["p1"]["selected"] = False
@@ -121,13 +121,13 @@ def start(b_pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1),
                                 if ((black_checker == r_d and gc.select_cord == r_d_2x) or (black_checker == l_d and gc.select_cord == l_d_2x) or (black_checker == r_t and gc.select_cord == r_t_2x) or (black_checker == l_t and gc.select_cord == l_t_2x)):
                                     black_checker_index = black_checkers.pos.index(black_checker)
                                     white_checkers.capt_pos.append(black_checkers.pos.pop(black_checker_index)) # Add black piece position to list of captured black pieces
-                                    white_checkers.capt_types.append(black_checkers.all_pieces.pop(black_checker_index))  # Add black piece type to list of captured black pieces
+                                    white_checkers.capt_types.append(black_checkers.types.pop(black_checker_index))  # Add black piece type to list of captured black pieces
 
                                     
                         white_checkers.pos[selection] = clicked_cord
                         # Check if white piece can become a king
                         if white_checkers.pos[selection][1] == 0:
-                            white_checkers.all_pieces[selection] = "king"
+                            white_checkers.types[selection] = "king"
                         gc.set_current_player("p1")
                         gc.lch["p2"]["moved"] = True
                         gc.lch["p2"]["selected"] = False
@@ -142,7 +142,7 @@ def start(b_pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1),
         clock.tick(60)
 
     pygame.quit()
-    g_r.update_record(black_checkers.pos, white_checkers.pos, black_checkers.all_pieces, white_checkers.all_pieces)
+    g_r.update_record(black_checkers, white_checkers)
 
 
 if __name__ == "__main__":

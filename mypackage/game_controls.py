@@ -8,8 +8,8 @@ class GameControls:
         self.__players = {"p1": black_checkers, "p2": white_checkers}
         self.__player_1_cords = self.__players["p1"].get_pos()
         self.__player_2_cords = self.__players["p2"].get_pos()
-        self.__player_1_types = self.__players["p1"].all_pieces
-        self.__player_2_types = self.__players["p2"].all_pieces
+        self.__player_1_types = self.__players["p1"].types
+        self.__player_2_types = self.__players["p2"].types
         self.lch = {"p1": {"selected": False,"moved": False}, "p2": {"selected": False, "moved": True}, "winner": None}
         self.select_cord = None
         self.current_player_cords = self.__players[self.__current_player].get_pos()

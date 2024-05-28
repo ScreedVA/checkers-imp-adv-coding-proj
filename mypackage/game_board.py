@@ -69,18 +69,18 @@ class GameBoard:
         """Render each pice onto the board when called"""
         for i in range(len(self.__bc.get_pos())):
             # Check if black piece is a man
-            if self.__bc.all_pieces[i] == "man":
+            if self.__bc.types[i] == "man":
                 surface.blit(self.__img_h.get_black_checker(), (self.__bc.get_pos()[i][0] * self.get_square_size(), self.__bc.get_pos()[i][1] * self.get_square_size()))
             # Check if black piece is a king
-            elif self.__bc.all_pieces[i] == "king":
+            elif self.__bc.types[i] == "king":
                 surface.blit(self.__img_h.get_black_king(), (self.__bc.get_pos()[i][0] * self.get_square_size(), self.__bc.get_pos()[i][1] * self.get_square_size()))
 
         for i in range(len(self.__wc.get_pos())):
             # Check if white piece is a man 
-            if self.__wc.all_pieces[i] == "man":
+            if self.__wc.types[i] == "man":
                 surface.blit(self.__img_h.get_white_checker(), (self.__wc.get_pos()[i][0] * self.get_square_size(), self.__wc.get_pos()[i][1] * self.get_square_size()))
         # Check if white piece is a king
-            elif self.__wc.all_pieces[i] == "king":
+            elif self.__wc.types[i] == "king":
                 surface.blit(self.__img_h.get_white_king(), (self.__wc.get_pos()[i][0] * self.get_square_size(), self.__wc.get_pos()[i][1] * self.get_square_size()))
 
 
