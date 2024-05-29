@@ -1,8 +1,13 @@
 import pygame
 import time
 
+
 from mypackage import CheckerStatus, GameBoard, GameControls, ImageHandler, GameRecord
 # black_checker = pygame.transform.scale(pygame.Surface(img_h.get_black_checker()), (100, 100))
+
+
+
+
 
 g_r = GameRecord()
 def main():
