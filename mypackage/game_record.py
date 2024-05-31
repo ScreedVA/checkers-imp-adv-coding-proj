@@ -29,7 +29,7 @@ class GameRecord:
             
         }
         with open(self.__file_path, "w") as f:
-            json.dump(data, f,  separators=(',', ':'))
+            json.dump(data, f,  indent=1)
 
     def read_record(self):
         """Returns previous game data or none"""

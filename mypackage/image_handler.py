@@ -1,28 +1,35 @@
 from PIL import Image
 from pygame import image, transform
 
+
+
 class ImageHandler:
+    """Class for handling game image loading and cropping"""
     def __init__(self, size=(100,100)):
         self.checkers_img = Image.open("static/images/checkers.png")
         self.__size = size
         self.__size_small = (size[0] // 2, size[1] // 2)
 
     def get_black_checker(self, size="normal"):
+        """Retuns a black checker image as a pygame surface"""
         if size == "small":
             return transform.scale(self.pil_to_surface(self.checkers_img.crop((64, 0, 96, 32))), self.__size_small)
         return transform.scale(self.pil_to_surface(self.checkers_img.crop((64, 0, 96, 32))), self.__size)
     
     def get_white_checker(self, size="normal"):
+        """Retuns a white checker image as a pygame surface"""
         if size == "small":
             return transform.scale(self.pil_to_surface(self.checkers_img.crop((96, 0, 128, 32))), self.__size_small)
         return transform.scale(self.pil_to_surface(self.checkers_img.crop((96, 0, 128, 32))), self.__size)
     
     def get_black_king(self, size="normal"):
+        """Retuns a black king image as a pygame surface"""
         if size == "small":
             return transform.scale(self.pil_to_surface(self.checkers_img.crop((0, 0, 32, 32))), self.__size_small)
         return transform.scale(self.pil_to_surface(self.checkers_img.crop((0, 0, 32, 32))), self.__size)
     
     def get_white_king(self, size="normal"):
+        """Retuns a white king image as a pygame surface"""
         if size == "small":
             return transform.scale(self.pil_to_surface(self.checkers_img.crop((32, 0, 64, 32))), self.__size_small)
         return transform.scale(self.pil_to_surface(self.checkers_img.crop((32, 0, 64, 32))), self.__size)

@@ -5,6 +5,7 @@ font.init()
 
 class GameBoardDef:
     def __init__(self, b_c, w_c, w, h, diff=1) -> None:
+        """Initiliazs default game board settings"""
         self._width = w * diff
         self._height = h * diff
         self._colors = {"bg": "#ffe4ba",
@@ -12,16 +13,9 @@ class GameBoardDef:
                          "border": "black"}
         self._bc = b_c
         self._wc = w_c
-
-
-
-
-
-
 class GameBoard(GameBoardDef):
     """Class to handle game board functionality"""
     def __init__(self, b_c, w_c, w, h, diff=1) -> None:
-        # Call the __init__ method of the parent class (GameBoardDef)
         super().__init__(b_c, w_c, w, h, diff)
         self.font_init()
 
@@ -142,4 +136,8 @@ class GameBoard(GameBoardDef):
             surface.blit(self.w_font.render("Black(P1) is the Winner", True, "black"), dest)
         elif self.__gc.lch["winner"] == "white(p2)":
             surface.blit(self.w_font.render("White(P2) is the Winner", True, "black"), dest)
+
+
+
+
         
