@@ -6,12 +6,6 @@ from mypackage import GameCheckerStatus, GameBoard, GameControls, ImageHandler, 
 
 
 
-
-
-
-
-            
-
 def start(b_pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1), (0, 2), (2, 2), (4, 2), (6, 2)], 
           w_pos=[(1, 7), (3, 7), (5, 7), (7, 7), (0, 6), (2, 6), (4, 6), (6, 6), (1, 5), (3, 5), (5, 5), (7, 5)], 
           b_types=["man"] * 12, 
@@ -30,7 +24,7 @@ def start(b_pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1),
     """Initializing Packages"""
     black_checkers = GameCheckerStatus(b_pos, b_types, b_capt_pos, b_capt_types)
     white_checkers = GameCheckerStatus(w_pos, w_types, w_capt_pos, w_capt_types)
-    gb = GameBoard(black_checkers, white_checkers, SCREEN_WIDTH, SCREEN_HEIGHT, 0.45)
+    gb = GameBoard(black_checkers, white_checkers, SCREEN_WIDTH, SCREEN_HEIGHT, 0.65)
     img_h = ImageHandler((gb.get_square_space()))
     gc = GameControls(gb.get_square_space(), black_checkers, white_checkers)
     gb.post_init(image_handler=img_h, game_controls=gc)

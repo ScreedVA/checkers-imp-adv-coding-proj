@@ -17,7 +17,6 @@ class GameBoardDef:
         self._bc = b_c
         self._wc = w_c
 
-
 class GameBoard(GameBoardDef):
     """Class to handle game board functionality"""
     def __init__(self, b_c, w_c, w, h, diff=1) -> None:
@@ -189,8 +188,6 @@ class GameRecord:
             return True
         return False
     
-
-
 class GameInterface(GameRecord):
     def __init__(self, start) -> None:
         self.__start = start
@@ -223,7 +220,6 @@ class GameInterface(GameRecord):
             print("You have no previous games, Starting round...")
             self.__start()
 
-
 class GameCheckerStatus:
     """Class to handle and record changes in the white and black checker objects"""
     def __init__(self, pos, types, capt_pos, capt_types) -> None:
@@ -242,8 +238,6 @@ class GameCheckerStatus:
     def get_pos(self):
         """Getter which returns checker positions"""
         return self.pos
-
-
 
 class GameControls:
     """Class to control game logic, turn handling and behaviour"""
