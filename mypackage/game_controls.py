@@ -16,7 +16,8 @@ class GameControls:
         self.select_cord = None
         self.current_player_cords = self.__players[self.__current_player].get_pos()
         self.font = font.Font("static/fonts/DaniloCatalina.ttf", )
-    
+
+
     def render_selection(self,surface):
         if self.select_cord:
                 """Check if player has selected a black(p1) piece when black is the current player"""

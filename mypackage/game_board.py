@@ -13,6 +13,8 @@ class GameBoardDef:
                          "border": "black"}
         self._bc = b_c
         self._wc = w_c
+        
+
 class GameBoard(GameBoardDef):
     """Class to handle game board functionality"""
     def __init__(self, b_c, w_c, w, h, diff=1) -> None:

@@ -2,44 +2,13 @@ import pygame
 import time
 
 
-from mypackage import CheckerStatus, GameBoard, GameControls, ImageHandler, GameRecord
+from mypackage import CheckerStatus, GameBoard, GameControls, ImageHandler, GameInterface
 # black_checker = pygame.transform.scale(pygame.Surface(img_h.get_black_checker()), (100, 100))
 
 
 
 
 
-g_r = GameRecord()
-def main():
-    """Main menu interface prompts user to configure game settings"""
-    # Checks if user has a previously saved game
-    if g_r.check_record():
-        new_or_load = input("\nWould you like to load(L) your previous game or start a new game(N)\n").title()
-        # Checks if user wants to load previously saved round
-        if new_or_load == "L":
-            data = g_r.read_record()
-            print("\nLoading previous round...")
-            start(data["pos"]["black_pos"], 
-                  data["pos"]["white_pos"], 
-                  data["types"]["black_types"], 
-                  data["types"]["white_types"],
-                  data["capt_pos"]["b_capt_pos"],
-                  data["capt_pos"]["w_capt_pos"],
-                  data["capt_types"]["b_capt_types"],
-                  data["capt_types"]["w_capt_types"],
-                )
-        # Checks if user wants to start a new round
-        elif new_or_load == "N":
-            print("\nStarting new round...")
-            start()
-        # Checks if user made invalid input
-        else:
-            print(f"'{new_or_load}' is an invalid input, enter either L or N\n")
-            time.sleep(1)
-            main()
-    else:
-        print("You have no previous games, Starting round...")
-        start()
 
 
             
@@ -198,11 +167,13 @@ def start(b_pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1),
         clock.tick(60)
 
     pygame.quit()
-    g_r.update_record(black_checkers, white_checkers)
+    g_i.update_record(black_checkers, white_checkers)
 
 
 if __name__ == "__main__":
-    main()
+    g_i = GameInterface(start)
+    g_i.configure_game()
+    # main()
     # start()
 
 
