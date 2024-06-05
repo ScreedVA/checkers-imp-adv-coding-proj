@@ -1,8 +1,7 @@
 import pygame
 import time
+from mypackage import GameCheckerStatus, GameBoard, GameControls, ImageHandler, GameInterface
 
-
-from mypackage import CheckerStatus, GameBoard, GameControls, ImageHandler, GameInterface
 # black_checker = pygame.transform.scale(pygame.Surface(img_h.get_black_checker()), (100, 100))
 
 
@@ -29,8 +28,8 @@ def start(b_pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1),
     SCREEN_HEIGHT = 1000
 
     """Initializing Packages"""
-    black_checkers = CheckerStatus(b_pos, b_types, b_capt_pos, b_capt_types)
-    white_checkers = CheckerStatus(w_pos, w_types, w_capt_pos, w_capt_types)
+    black_checkers = GameCheckerStatus(b_pos, b_types, b_capt_pos, b_capt_types)
+    white_checkers = GameCheckerStatus(w_pos, w_types, w_capt_pos, w_capt_types)
     gb = GameBoard(black_checkers, white_checkers, SCREEN_WIDTH, SCREEN_HEIGHT, 0.45)
     img_h = ImageHandler((gb.get_square_space()))
     gc = GameControls(gb.get_square_space(), black_checkers, white_checkers)
