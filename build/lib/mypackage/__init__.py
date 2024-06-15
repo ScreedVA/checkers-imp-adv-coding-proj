@@ -1,9 +1,8 @@
+from .game import GameBoard, GameCheckerStatus, GameInterface, GameControls
+from .utility import ImageHandler
 import pygame
-import time
-from mypackage import GameCheckerStatus, GameBoard, GameControls, ImageHandler, GameInterface
 
-# black_checker = pygame.transform.scale(pygame.Surface(img_h.get_black_checker()), (100, 100))
-
+__version__ = "0.1.0"
 
 
 def start(b_pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1), (0, 2), (2, 2), (4, 2), (6, 2)], 
@@ -21,7 +20,7 @@ def start(b_pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1),
     SCREEN_WIDTH = 1000
     SCREEN_HEIGHT = 1000
 
-    """Initializing Packages"""
+    """Initializing Classes"""
     black_checkers = GameCheckerStatus(b_pos, b_types, b_capt_pos, b_capt_types)
     white_checkers = GameCheckerStatus(w_pos, w_types, w_capt_pos, w_capt_types)
     gb = GameBoard(black_checkers, white_checkers, SCREEN_WIDTH, SCREEN_HEIGHT, 0.65)
@@ -29,7 +28,7 @@ def start(b_pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1),
     gc = GameControls(gb.get_square_space(), black_checkers, white_checkers)
     gb.post_init(image_handler=img_h, game_controls=gc)
 
-
+    """Initializing Default GUI Settings"""
     screen = pygame.display.set_mode(gb.get_board_size())
     clock = pygame.time.Clock()
     running = True
@@ -160,15 +159,12 @@ def start(b_pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1),
         clock.tick(60)
 
     pygame.quit()
+    """Update JSON with game data"""
     g_i.update_record(black_checkers, white_checkers)
 
 
-if __name__ == "__main__":
-    g_i = GameInterface(start)
+g_i = GameInterface(start)
+
+def main():
     g_i.configure_game()
-    # main()
-    # start()
-
-
-
 
