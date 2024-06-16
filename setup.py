@@ -7,6 +7,7 @@ setup(
     author_email="techscreed@gmail.com",
     description="Checkers implementation in python based on the international draughts",
     long_description=open("README.md").read(),
+    long_description_content_type="text/markdown",
     packages=find_packages(),
     package_data={
         'mypackage': ['static/*.png', "static/*.ttf"],  # Adjust the pattern to match your static file extensions
