@@ -25,7 +25,7 @@ To install the application:
 
 Clone repository
 ```bash
-git clone "https://github.com/ScreedVA/Checkers-implementation-pygame.git"
+git clone https://github.com/ScreedVA/checkers-imp-adv-code-proj.git
 ```
 
 Move into repository directory
