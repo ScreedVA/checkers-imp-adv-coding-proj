@@ -10,7 +10,7 @@
 - Dependancies
 
 ## Introduction
-This project is comprised of 5 modules within the mypackage directory each responsible for handling thier respective features for the game, This project took around 20 - 25 hours to complete including research and experimentation with the pygame framework. This is my first time creating a project of this scale using pygame.
+This project is comprised of 2 modules within the mypackage directory each responsible for handling thier respective features for the game, This project took around 20 - 25 hours to complete including research and experimentation with the pygame framework. This is my first time creating a project of this scale using pygame.
 
 ## Features
 - Graphical User Interface
@@ -20,6 +20,7 @@ This project is comprised of 5 modules within the mypackage directory each respo
 
 
 ## Installation
+### Installation from GitHub
 To install the application:
 
 Clone repository
@@ -29,7 +30,7 @@ git clone "https://github.com/ScreedVA/Checkers-implementation-pygame.git"
 
 Move into repository directory
 ```bash
-cd Checkers-implementation-pygame
+cd checkers-imp-adv-code-proj
 ```
 
 Create virtual environment
@@ -47,16 +48,42 @@ Install pip (if nessasary)
 python -m pip install --upgrade pip
 ```
 
-Install project dependancies
+Install package locally
 ```bash
-pip install -r requirements.txt
+pip install -e .
+```
+### Installation from Pypi
+
+Create project directory
+```bash
+mkdir checkers-imp-adv-code-proj-techscreed
+```
+
+Enter directory
+```bash
+cd checkers-imp-adv-code-proj-techscreed
+```
+
+Create virtual environment
+```bash
+python -m venv .venv
+```
+
+Activate virtual environment
+```bash
+.venv\Scripts\activate
+```
+
+Install package from Pypi
+```bash
+pip install checkers-imp-adv-code-proj
 ```
 
 ## Usage
 
 Run application and configure game settings
 ```bash
-python main.py
+run_checkers_round
 ```
 
 ## Contact Info

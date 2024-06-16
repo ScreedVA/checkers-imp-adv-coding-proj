@@ -13,7 +13,7 @@ setup(
     },
     install_requires=[
         "pillow",
-        "pygame"
+        "pygame",
     ],
     entry_points={
         "console_scripts": [

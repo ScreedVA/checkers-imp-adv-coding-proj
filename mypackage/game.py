@@ -2,7 +2,6 @@ from pygame import draw, font
 from typing import List, Tuple
 import json
 import time
-import pkg_resources
 font.init()
 
 
@@ -29,14 +28,9 @@ class GameBoard(GameBoardDef):
         self.__gc = game_controls
     
     def font_init(self):
-        gs_font_path = pkg_resources.resource_filename('mypackage', 'static/fonts/DaniloCatalina.ttf')
-        w_font_path = pkg_resources.resource_filename('mypackage', 'static/fonts/DaniloCatalina.ttf')
-
         self.gs_font = font.SysFont('timesnewroman', int(self.get_square_size() * 0.9))
         self.w_font = font.SysFont('timesnewroman', int(self.get_square_size() * 0.9))
             
-
-
 
 
     def get_board_size(self):
