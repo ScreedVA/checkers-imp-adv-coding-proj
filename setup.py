@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name="checkers-imp-adv-code-proj",
     version="0.1.0",
-    author="ScreedVA",
+    author="Christian DY",
     author_email="techscreed@gmail.com",
     description="Checkers implementation in python based on the international draughts",
     long_description=open("README.md").read(),

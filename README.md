@@ -80,11 +80,42 @@ pip install checkers-imp-adv-code-proj
 ```
 
 ## Usage
-
-Run application and configure game settings
+### Example 1
+Run application
 ```bash
 run_checkers_round
 ```
+>  Output:
+You have no previous games, Starting round...
+
+### Example 2
+Run application
+```bash
+run_checkers_round
+```
+>  Output:
+Would you like to load(L) your previous game or start a new game(N)
+
+```bash
+N
+```
+> Output: 
+Starting new round...
+
+### Example 3
+Run application
+```bash
+run_checkers_round
+```
+>  Output:
+Would you like to load(L) your previous game or start a new game(N)
+
+```bash
+L
+```
+> Output: 
+Loading previous round...
+
 
 ## Contact Info
 [LinkedIn Profile](https://www.linkedin.com/in/christian-damete-yeboa-bb79442a3/)
