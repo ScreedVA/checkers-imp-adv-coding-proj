@@ -1,7 +1,6 @@
 from pygame import draw, font, Surface
 from typing import List, Tuple, Dict
-from mypackage.utility import ImageHandler, KingHandler
-import json
+from mypackage.utility import ImageHandler, KingHandler, RecordHandler
 import time
 font.init()
 
@@ -154,20 +153,24 @@ class GameBoard(ImageHandler):
         """Renders all captured pieces at the right side of the screen"""
         for i in range(len(self._bc.capt_types)):
             # Check if white piece is a man or king
+            x = self._width * 0.8
+            y = (self._height * 0.7 - (i * self.get_square_size() // 2))
             if self._bc.capt_types[i] == "man":
-                coord_pos: Tuple[int] = (self._width * 0.8, i * self.get_square_size() // 2)
+                coord_pos: Tuple[int] = (x, y)
                 surface.blit(self.get_white_checker("small"), coord_pos)
             elif self._bc.capt_types[i] == "king":
-                coord_pos: Tuple[int] = (self._width * 0.8, i * self.get_square_size() // 2)
+                coord_pos: Tuple[int] = (x, y)
                 surface.blit(self.get_white_king("small"), coord_pos)
         
         for i in range(len(self._wc.capt_types)):
             # Check if black piece is a man or king
+            x = self._width * 0.9
+            y = (self._height * 0.7 - (i * self.get_square_size() // 2))
             if self._wc.capt_types[i] == "man":
-                coord_pos: Tuple[int] = (self._width * 0.9, i * self.get_square_size() // 2)
+                coord_pos: Tuple[int] = (x, y)
                 surface.blit(self.get_black_checker("small"), coord_pos)
             elif self._wc.capt_types[i] == "king":
-                coord_pos: Tuple[int] = (self._width * 0.9, i * self.get_square_size() // 2)
+                coord_pos: Tuple[int] = (x, y)
                 surface.blit(self.get_black_king("small"), coord_pos)
         
     def render_winner(self, surface) -> None:
@@ -178,56 +181,13 @@ class GameBoard(ImageHandler):
         elif self.__gc.lch["winner"] == "white(p2)":
             surface.blit(self.w_font.render("White(P2) is the Winner", True, "black"), dest)
 
-class GameRecord:
-    """Class which handles json game data"""
-    def __init__(self) -> None:
-        """Initiliazes GameRecord variables"""
-        self.file_path: str = "game_record.json"
-    
 
-    def update_record(self,b_c, w_c) -> None:
-        """Will update the game record json file with the most recent game data"""
-        data: Dict[Dict[List[Tuple[int | float] | str]]]
-        data = {
-            "pos": {
-                "black_pos": b_c.pos,
-                "white_pos": w_c.pos
-            },
-            "types": {
-                "black_types": b_c.types,
-                "white_types": w_c.types
-            },
-            "capt_pos": {
-                "b_capt_pos": b_c.capt_pos,
-                "w_capt_pos": w_c.capt_pos
-            },
-            "capt_types": {
-                "b_capt_types": b_c.capt_types,
-                "w_capt_types": w_c.capt_types
-            }
-            
-        }
-        with open("game_record.json", "w") as f:
-            json.dump(data, f,  indent=1)
-
-    def _read_record(self) -> Dict | None:
-        """Returns previous game data or none"""
-        try:
-            with open("game_record.json", "r") as f:
-                data = json.load(f)
-                return data
-        except FileNotFoundError:
-            return None
-        
-    def _check_record(self) -> True | False:
-        """Returns true if previous game data exists"""
-        if self._read_record():
-            return True
-        return False
     
-class GameInterface(GameRecord):
+class GameInterface(RecordHandler):
     def __init__(self, start) -> None:
+        super().__init__()
         self.__start = start
+
 
 
     def configure_game(self):
@@ -352,7 +312,7 @@ class GameControls(KingHandler):
         return all_possible_positions
     
 
-    def return_selection(self):
+    def return_selection(self) -> int | None:
         """Return the click selection index if it is current_player_cords list"""
         # Checks if current player is player 1
         if self._current_player == "p1":
@@ -364,20 +324,20 @@ class GameControls(KingHandler):
                 return self._player_2_cords.index(self.select_cord)
         return None
 
-    def return_authorized_positions(self):
+    def return_authorized_positions(self) -> List:
          """Returns the player coordinates at the index of the click selection"""
          if self.return_selection() is not None:
               return self.__evaluate_positions()[self.return_selection()]
          return []
     
-    def __render_authorized_positions(self, surface: Surface):
+    def __render_authorized_positions(self, surface: Surface) -> None:
          """Renders a green circle indicator at each position in the valid options list"""
          for cord in self.return_authorized_positions():
               x = (cord[0] * self.__square_space[0]) + self.__square_space[0] / 2
               y = (cord[1] * self.__square_space[0]) + self.__square_space[0] / 2
               draw.circle(surface, self.__colors["indicator"], (x, y), 5)
     
-    def eval_winner(self):
+    def eval_winner(self) -> None:
         """Checks for a winning player on every game loop"""
         if not self._player_2_cords:
             self.lch["winner"] = "black(p1)"
@@ -386,13 +346,13 @@ class GameControls(KingHandler):
     
          
 
-    def get_player_2_cords(self):
+    def get_player_2_cords(self) -> List[Tuple[int | float]]:
         return self._player_2_cords
 
-    def get_player_1_cords(self):
+    def get_player_1_cords(self) -> List[Tuple[int | float]]:
         return self._player_1_cords
 
-    def get_life_cycle_hook(self):
+    def get_life_cycle_hook(self) -> Dict:
          return self.lch
 
         

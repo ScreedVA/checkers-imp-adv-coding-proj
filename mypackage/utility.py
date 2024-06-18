@@ -1,6 +1,7 @@
 from PIL import Image
 from pygame import image, transform, Surface
-from typing import Tuple, List
+from typing import Tuple, List, Dict
+import json
 
 
 
@@ -40,10 +41,6 @@ class ImageHandler:
         mode = pil_image.mode
         size = pil_image.size
         data = pil_image.tobytes()
-        # print(f"Mode :{mode}")
-        # print(f"Size :{size}")
-        # print(f"Data :{data}")
-        # Create a surface from the string data
         surface = image.fromstring(data, size, mode)
         return surface
 
@@ -144,7 +141,52 @@ class KingHandler(ManHandler):
                         possible_positions.append(l_d_2x)
         return possible_positions
 
+class RecordHandler:
+    """Class which handles json game data"""
+    def __init__(self) -> None:
+        """Initiliazes GameRecord variables"""
+        self._file_path: str = "game_record.json"
+    
 
+    def update_record(self,b_c, w_c) -> None:
+        """Will update the game record json file with the most recent game data"""
+        data: Dict[Dict[List[Tuple[int | float] | str]]]
+        data = {
+            "pos": {
+                "black_pos": b_c.pos,
+                "white_pos": w_c.pos
+            },
+            "types": {
+                "black_types": b_c.types,
+                "white_types": w_c.types
+            },
+            "capt_pos": {
+                "b_capt_pos": b_c.capt_pos,
+                "w_capt_pos": w_c.capt_pos
+            },
+            "capt_types": {
+                "b_capt_types": b_c.capt_types,
+                "w_capt_types": w_c.capt_types
+            }
+            
+        }
+        with open(self._file_path, "w") as f:
+            json.dump(data, f,  indent=1)
+
+    def _read_record(self) -> Dict | None:
+        """Returns previous game data or none"""
+        try:
+            with open(self._file_path, "r") as f:
+                data = json.load(f)
+                return data
+        except FileNotFoundError:
+            return None
+        
+    def _check_record(self) -> True | False:
+        """Returns true if previous game data exists"""
+        if self._read_record():
+            return True
+        return False
     
         
 
