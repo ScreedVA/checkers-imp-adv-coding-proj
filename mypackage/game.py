@@ -63,13 +63,17 @@ class GameBoard(GameBoardDef):
     
     def render_game_env(self, surface): 
         """Renders 32 squares squares, 9 vertical and 9 horizontal lines onto the screen
-        (excecutes render_pieces(), render_game_status() and render_captures() functions)"""
+        (excecutes render_pieces(), render_game_status() and render_captures() functions)
+        
+        The render_game_env() method utilises the modular congruence of n in range modulo 4 to
+        evenly draw columns accross rows on the grid
+        """
         surface.fill(self.get_bg_color())
         n = 0
         mod = 4
         while n < self._squares // 2:
             y = n // mod
-            x = n % mod
+            x = n % mod # n ≅ x(mod 4)
             diff = x * (self.get_square_size() * 2) # diff = (0 -> 200 -> 400 -> 600)
             if y % 2 != 0:
                 """Draw gray square when y =(1 -> 3 -> 5 -> 7)"""
