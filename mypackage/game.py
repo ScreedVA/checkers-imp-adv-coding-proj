@@ -1,6 +1,6 @@
-from pygame import draw, font
+from pygame import draw, font, Surface
 from typing import List, Tuple, Dict
-from mypackage.utility import ImageHandler
+from mypackage.utility import ImageHandler, KingHandler
 import json
 import time
 font.init()
@@ -20,9 +20,10 @@ class GameBoard(ImageHandler):
         self._squares: int = 64
         self._bc: GameCheckerStatus = b_c
         self._wc: GameCheckerStatus = w_c
+        self.font_init()
+        # Overwrite Parent attributes
         self._size = self.get_square_space()
         self._size_small =  (self._size[0] // 2, self._size[1] // 2)
-        self.font_init()
         
 
     def post_init(self, game_controls):
@@ -34,7 +35,6 @@ class GameBoard(ImageHandler):
 
     def get_squares(self):
         return self._squares   
-
 
     def get_board_size(self) -> Tuple[int]:
         """Getter which returns size of game board"""
@@ -277,179 +277,91 @@ class GameCheckerStatus:
         """Getter which returns checker positions"""
         return self.pos
 
-class GameControls:
+class GameControls(KingHandler):
     """Class to control game logic, turn handling and behaviour"""
     def __init__(self,  sqaure_space, black_checkers, white_checkers) -> None:
+        super().__init__()
         """Initiliazes default game control settings"""
         self.__square_space: Tuple[float] = sqaure_space
         self.__colors: Dict[str] = {"p1": "#d70000", "p2": "#0229bf", "indicator":"#2db83d"}
-        self.__current_player: str = "p1"
+        self._current_player: str = "p1"
         self.__players: Dict[GameCheckerStatus] = {"p1": black_checkers, "p2": white_checkers}
-        self.__player_1_cords: List[Tuple[int]] = self.__players["p1"].get_pos()
-        self.__player_2_cords: List[Tuple[int]] = self.__players["p2"].get_pos()
+        self._player_1_cords: List[Tuple[int]] = self.__players["p1"].get_pos()
+        self._player_2_cords: List[Tuple[int]] = self.__players["p2"].get_pos()
         self.__player_1_types: List[str] = self.__players["p1"].types
         self.__player_2_types: List[str] = self.__players["p2"].types
         self.lch: Dict[Dict[bool] | bool | str] = {"p1": {"selected": False,"moved": False}, "p2": {"selected": False, "moved": True}, "winner": False}
         self.select_cord: Tuple[float] = None
-        self.current_player_cords: List[Tuple[int]] = self.__players[self.__current_player].get_pos()
+        self.current_player_cords: List[Tuple[int]] = self.__players[self._current_player].get_pos()
         self.font: font.Font = font.Font("static/fonts/DaniloCatalina.ttf", )
 
 
-    def render_selection(self,surface):
+    def render_selection(self, surface: Surface):
         if self.select_cord:
                 """Check if player has selected a black(p1) piece when black is the current player"""
-                if self.__current_player == "p1":
-                    if self.select_cord in self.__player_1_cords:
+                if self._current_player == "p1":
+                    if self.select_cord in self._player_1_cords:
                         self.__render_authorized_positions(surface)
                         pos: Tuple[float, float] = (self.select_cord[0] * self.__square_space[0], self.select_cord[1] * self.__square_space[0])
-                        draw.rect(surface, self.__colors[self.__current_player], [pos, self.__square_space], 3)
+                        draw.rect(surface, self.__colors[self._current_player], [pos, self.__square_space], 3)
                 
                 """Check if player has selected a white(p2) piece when white is the current player"""
-                if self.__current_player == "p2":
-                    if self.select_cord in self.__player_2_cords:
+                if self._current_player == "p2":
+                    if self.select_cord in self._player_2_cords:
                         self.__render_authorized_positions(surface)
                         pos: Tuple[float, float] = (self.select_cord[0] * self.__square_space[0], self.select_cord[1] * self.__square_space[0])
-                        draw.rect(surface, self.__colors[self.__current_player], [pos, self.__square_space], 3)
+                        draw.rect(surface, self.__colors[self._current_player], [pos, self.__square_space], 3)
 
     def set_current_player(self, player: str):
          """Setter for current player"""
-         self.__current_player = player
+         self._current_player = player
 
     def get_current_player(self) -> str:
         """Getter for current player"""
-        return self.__current_player
+        return self._current_player
 
 
     def __evaluate_positions(self) -> List[List[Tuple[int | float]]]:
         """Checks for all the possible moves for each piece of the current player"""
         all_possible_positions: List[List[Tuple]] = []
         possible_positions: List[Tuple] = []
-        if self.__current_player == "p1":
-            for i in range(len(self.__player_1_cords)):
+        if self._current_player == "p1":
+            for i in range(len(self._player_1_cords)):
                 # Check if black player(p1) piece is a man
                 if self.__player_1_types[i] == "man":
-                    possible_positions = self.__eval_men(self.__player_1_cords[i])
+                    possible_positions = self._eval_men(self._player_1_cords[i])
                     all_possible_positions.append(possible_positions)
                 # check if black player(p1) piece is a king
                 elif self.__player_1_types[i] == "king":
-                    possible_positions = self.__eval_king(self.__player_1_cords[i])
+                    possible_positions = self._eval_king(self._player_1_cords[i])
                     all_possible_positions.append(possible_positions)
 
 
-        elif self.__current_player == "p2":
-            for i  in range(len(self.__player_2_cords)):
+        elif self._current_player == "p2":
+            for i  in range(len(self._player_2_cords)):
                 # Check if white player(p2) piece is a man
                 if self.__player_2_types[i] == "man":
-                    possible_positions = self.__eval_men(self.__player_2_cords[i])
+                    possible_positions = self._eval_men(self._player_2_cords[i])
                     all_possible_positions.append(possible_positions)
                 # Check if white player(p2) piece is a king
                 elif self.__player_2_types[i] == "king":
-                    possible_positions = self.__eval_king(self.__player_2_cords[i])
+                    possible_positions = self._eval_king(self._player_2_cords[i])
                     all_possible_positions.append(possible_positions)
                      
             
         return all_possible_positions
     
-    def __eval_men(self, cord: Tuple[int | float]) -> List[Tuple[int | float]]:
-        """Checks and validates all possible moves for a given man piece"""
-        possible_positions: List[Tuple[int | float]] = []
-        if self.__current_player == "p1":
-                # Initiliaze possible positions
-                r_d = (cord[0] + 1, cord[1] + 1)
-                l_d = (cord[0] - 1, cord[1] + 1)
-                r_d_2x = (cord[0] + 2, cord[1] + 2)
-                l_d_2x = (cord[0] - 2, cord[1] + 2)
-                if 0 <= cord[0] <= 7 and cord[1] <= 7:
-                    # Check if position at 1 right and 1 down is valid
-                    if (r_d not in self.__player_2_cords) and (r_d not in self.__player_1_cords) and (0 <= cord[0] + 1 <= 7) and (0 <= cord[1] + 1 <= 7):
-                        possible_positions.append(r_d)
-                    # Check if position at 1 left and 1 down is valid
-                    if (l_d not in self.__player_2_cords) and (l_d not in self.__player_1_cords) and (0 <= cord[0] - 1 <= 7) and (0 <= cord[1] + 1 <= 7):
-                         possible_positions.append(l_d)
-                    # Check if position at 2 right and 2 down is valid
-                    if (r_d_2x not in self.__player_1_cords) and (r_d_2x not in self.__player_2_cords) and (r_d not in self.__player_1_cords) and (0 <= cord[0] + 2 <= 7) and (0 <= cord[1] + 2 <= 7) and (r_d in self.__player_2_cords):
-                         possible_positions.append(r_d_2x)
-                    # Check if position at 2 left and 2 down is valid
-                    if (l_d_2x not in self.__player_1_cords) and  (l_d_2x not in self.__player_2_cords) and (l_d not in self.__player_1_cords) and (0 <= cord[0] - 2 <= 7) and (0 <= cord[1] + 2 <= 7) and (l_d in self.__player_2_cords):
-                        possible_positions.append(l_d_2x)
-        
-        
-        if self.__current_player == "p2":
-                # Initiliaze possible positions
-                r_t = (cord[0] + 1, cord[1] - 1)
-                l_t = (cord[0] - 1, cord[1] - 1)
-                r_t_2x = (cord[0] + 2, cord[1] - 2)
-                l_t_2x = (cord[0] - 2, cord[1] - 2)
-                if cord[0] <= 7 and cord[0] >= 0 and (cord[1] <= 7):
-                    # Check if position at 1 right and 1 up is valid
-                    if (r_t not in self.__player_2_cords) and (r_t not in self.__player_1_cords) and (0 <= (cord[0] + 1) <= 7):
-                        possible_positions.append(r_t)
-                    # Check if position at 1 left and 1 up is valid
-                    if (l_t not in self.__player_2_cords) and (l_t not in self.__player_1_cords) and (0 <= (cord[0] - 1) <= 7):
-                            possible_positions.append(l_t)
-                    # Check if position at 2 right and 2 up is valid
-                    if (r_t_2x not in self.__player_2_cords) and  (r_t_2x not in self.__player_1_cords) and (r_t not in self.__player_2_cords) and (0 <= cord[0] + 2 <= 7) and (r_t in self.__player_1_cords):
-                            possible_positions.append(r_t_2x)
-                    # Check if position at 2 left and 2 up is valid
-                    if (l_t_2x not in self.__player_2_cords) and (l_t_2x not in self.__player_1_cords) and (l_t not in self.__player_2_cords) and (0 <= cord[0] - 2 <= 7) and (l_t in self.__player_1_cords):
-                        possible_positions.append(l_t_2x)
-        return possible_positions
-
-    def __eval_king(self, cord):
-        """Checks and validates all possible moves for a given king piece"""
-        possible_positions = self.__eval_men(cord)
-        
-        if self.__current_player == "p1":
-                # Initiliaze possible positions
-                r_t = (cord[0] + 1, cord[1] - 1)
-                l_t = (cord[0] - 1, cord[1] - 1)
-                r_t_2x = (cord[0] + 2, cord[1] - 2)
-                l_t_2x = (cord[0] - 2, cord[1] - 2)
-                if (cord[0] <= 7) and (cord[0] >= 0) and (cord[1] <= 7):
-                    # Check if position at 1 right and 1 up is valid
-                    if (r_t not in self.__player_2_cords) and (r_t not in self.__player_1_cords) and (0 <= (cord[0] + 1) <= 7):
-                        possible_positions.append(r_t)
-                    # Check if position at 1 left and 1 up is valid
-                    if (l_t not in self.__player_2_cords) and (l_t not in self.__player_1_cords) and (0 <= (cord[0] - 1) <= 7):
-                            possible_positions.append(l_t)
-                    # Check if position at 2 right and 2 up is valid
-                    if (r_t_2x not in self.__player_2_cords) and  (r_t_2x not in self.__player_1_cords) and (r_t not in self.__player_1_cords) and (0 <= cord[0] + 2 <= 7) and (r_t in self.__player_2_cords):
-                            possible_positions.append(r_t_2x)
-                    # Check if position at 2 left and 2 up is valid
-                    if (l_t_2x not in self.__player_2_cords) and (l_t_2x not in self.__player_1_cords) and (l_t not in self.__player_1_cords) and (0 <= cord[0] - 2 <= 7) and (l_t in self.__player_2_cords):
-                        possible_positions.append(l_t_2x)
-
-        if self.__current_player == "p2":
-                # Initiliaze possible positions
-                r_d = (cord[0] + 1, cord[1] + 1)
-                l_d = (cord[0] - 1, cord[1] + 1)
-                r_d_2x = (cord[0] + 2, cord[1] + 2)
-                l_d_2x = (cord[0] - 2, cord[1] + 2)
-                if (0 <= cord[0] <= 7) and (cord[1] <= 7):
-                    # Check if position at 1 right and 1 down is valid
-                    if r_d not in self.__player_2_cords and r_d not in self.__player_1_cords and 0 <= cord[0] + 1 <= 7:
-                        possible_positions.append(r_d)
-                    # Check if position at 1 left and 1 down is valid
-                    if l_d not in self.__player_2_cords and l_d not in self.__player_1_cords and 0 <= cord[0] - 1 <= 7:
-                         possible_positions.append(l_d)
-                    # Check if position at 2 right and 2 down is valid
-                    if r_d_2x not in self.__player_1_cords and r_d_2x not in self.__player_2_cords and r_d not in self.__player_2_cords and 0 <= cord[0] + 2 <= 7 and r_d in self.__player_1_cords:
-                         possible_positions.append(r_d_2x)
-                    # Check if position at 2 left and 2 down is valid
-                    if l_d_2x not in self.__player_1_cords and  l_d_2x not in self.__player_2_cords and l_d not in self.__player_2_cords and 0 <= cord[0] - 2 <= 7 and l_d in self.__player_1_cords:
-                        possible_positions.append(l_d_2x)
-        return possible_positions
 
     def return_selection(self):
         """Return the click selection index if it is current_player_cords list"""
         # Checks if current player is player 1
-        if self.__current_player == "p1":
-            if self.select_cord in self.__player_1_cords:
-                return self.__player_1_cords.index(self.select_cord)
+        if self._current_player == "p1":
+            if self.select_cord in self._player_1_cords:
+                return self._player_1_cords.index(self.select_cord)
         # Checks if current player is player 2
-        elif self.__current_player == "p2":
-            if self.select_cord in self.__player_2_cords:
-                return self.__player_2_cords.index(self.select_cord)
+        elif self._current_player == "p2":
+            if self.select_cord in self._player_2_cords:
+                return self._player_2_cords.index(self.select_cord)
         return None
 
     def return_authorized_positions(self):
@@ -458,7 +370,7 @@ class GameControls:
               return self.__evaluate_positions()[self.return_selection()]
          return []
     
-    def __render_authorized_positions(self, surface):
+    def __render_authorized_positions(self, surface: Surface):
          """Renders a green circle indicator at each position in the valid options list"""
          for cord in self.return_authorized_positions():
               x = (cord[0] * self.__square_space[0]) + self.__square_space[0] / 2
@@ -467,18 +379,18 @@ class GameControls:
     
     def eval_winner(self):
         """Checks for a winning player on every game loop"""
-        if not self.__player_2_cords:
+        if not self._player_2_cords:
             self.lch["winner"] = "black(p1)"
-        elif not self.__player_1_cords:
+        elif not self._player_1_cords:
             self.lch["winner"] = "white(p2)"
     
          
 
     def get_player_2_cords(self):
-        return self.__player_2_cords
+        return self._player_2_cords
 
     def get_player_1_cords(self):
-        return self.__player_1_cords
+        return self._player_1_cords
 
     def get_life_cycle_hook(self):
          return self.lch

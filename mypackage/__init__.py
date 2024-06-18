@@ -1,5 +1,4 @@
 from .game import GameBoard, GameCheckerStatus, GameInterface, GameControls
-from .utility import ImageHandler
 import pygame
 
 __version__ = "0.1.0"
