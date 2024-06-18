@@ -1,5 +1,5 @@
 from pygame import draw, font
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 import json
 import time
 font.init()
@@ -9,14 +9,14 @@ font.init()
 class GameBoardDef:
     def __init__(self, b_c, w_c, w, h, diff=1) -> None:
         """Initiliazs default game board settings"""
-        self._width = w * diff
-        self._height = h * diff
-        self._colors = {"bg": "#ffe4ba",
+        self._width: int = w * diff
+        self._height: int = h * diff
+        self._colors: Dict[str]= {"bg": "#ffe4ba",
                          "square": "#e3ae5c",
                          "border": "black"}
-        self._squares = 64
-        self._bc = b_c
-        self._wc = w_c
+        self._squares: int = 64
+        self._bc: GameCheckerStatus = b_c
+        self._wc: GameCheckerStatus = w_c
 
 class GameBoard(GameBoardDef):
     """Class to handle game board functionality"""
@@ -36,7 +36,7 @@ class GameBoard(GameBoardDef):
         return self._squares   
 
 
-    def get_board_size(self):
+    def get_board_size(self) -> Tuple[int]:
         """Getter which returns size of game board"""
         return (self._width, self._height)
         
@@ -52,7 +52,7 @@ class GameBoard(GameBoardDef):
         """Getter which returns the border color from colors dictionary"""
         return self._colors["border"]
 
-    def get_square_space(self):
+    def get_square_space(self) -> Tuple[int]:
         """Getter which returns the width and height of the board squares in a tuple"""
         return (self.get_square_size(), self.get_square_size())
     
@@ -69,19 +69,19 @@ class GameBoard(GameBoardDef):
         evenly draw columns accross rows on the grid
         """
         surface.fill(self.get_bg_color())
-        n = 0
-        mod = 4
+        n: int = 0
+        mod: int = 4
         while n < self._squares // 2:
-            y = n // mod
-            x = n % mod # n ≅ x(mod 4)
-            diff = x * (self.get_square_size() * 2) # diff = (0 -> 200 -> 400 -> 600)
+            y: int = n // mod
+            x: int = n % mod # n ≅ x(mod 4)
+            diff: int = x * (self.get_square_size() * 2) # diff = (0 -> 200 -> 400 -> 600)
             if y % 2 != 0:
                 """Draw gray square when y =(1 -> 3 -> 5 -> 7)"""
-                pos_size = [((self._width * 0.7 - diff), (y * self.get_square_size())), self.get_square_space()]
+                pos_size: List[Tuple] = [((self._width * 0.7 - diff), (y * self.get_square_size())), self.get_square_space()]
                 draw.rect(surface, self.get_square_color(), pos_size)
             else:
                 """Draw gray square when y = (0 -> 2 -> 4 -> 6)"""
-                pos_size = [((self._width * 0.6 - diff), (y * self.get_square_size())), self.get_square_space()]
+                pos_size: List[Tuple] = [((self._width * 0.6 - diff), (y * self.get_square_size())), self.get_square_space()]
                 draw.rect(surface, self.get_square_color(), pos_size)
             n += 1
     
@@ -97,10 +97,10 @@ class GameBoard(GameBoardDef):
         n = 0
         while n < 9:
             """Initialize render positions"""
-            hor_start = (0, n * self.get_square_size())
-            hor_end = (self._width * 0.8, n * self.get_square_size())
-            vert_start = (n * self.get_square_size(), 0)
-            vert_end = (n * self.get_square_size(), self._height * 0.8)
+            hor_start: Tuple[int] = (0, n * self.get_square_size())
+            hor_end: Tuple[int] = (self._width * 0.8, n * self.get_square_size())
+            vert_start: Tuple[int] = (n * self.get_square_size(), 0)
+            vert_end: Tuple[int] = (n * self.get_square_size(), self._height * 0.8)
             """Draw horizontal border lines"""
             draw.line(surface, self.get_border_color(), hor_start, hor_end)
             """Draw vertical border lines"""
@@ -116,7 +116,7 @@ class GameBoard(GameBoardDef):
 
 
     def render_pieces(self, surface) -> None:
-        """Renders each piece in CheckStatus.pos object lists onto the board when called"""
+        """Renders each piece in CheckStatus.pos object lists, onto the board when called"""
         for i in range(len(self._bc.get_pos())):
             # Check if black piece is a man
             if self._bc.types[i] == "man":
@@ -140,14 +140,14 @@ class GameBoard(GameBoardDef):
 
     def render_game_status(self, surface) -> None:
         """Render the game message prompts to players"""
-        dest = (self.get_square_size() * 0.1, self._height * 0.85)
-        if self.__gc.lch["p2"]["moved"]:
+        dest: Tuple[float] = (self.get_square_size() * 0.1, self._height * 0.85)
+        if self.__gc.lch["p2"]["moved"]: # Checks if it is black's turn to select a piece
             surface.blit(self.gs_font.render("Black select a Piece", True, "black"), dest)
-        if self.__gc.lch["p1"]["selected"]:
+        if self.__gc.lch["p1"]["selected"]:# Checks if it is black's turn to move a piece
             surface.blit(self.gs_font.render("Black move a Piece", True, "black"), dest)
-        if self.__gc.lch["p1"]["moved"]:
+        if self.__gc.lch["p1"]["moved"]: # Checks if it is white's turn to select a piece
             surface.blit(self.gs_font.render("White select a Piece", True, "black"), dest)
-        if self.__gc.lch["p2"]["selected"]:
+        if self.__gc.lch["p2"]["selected"]: # Checks if it is white's turn to move a piece
             surface.blit(self.gs_font.render("White move a Piece", True, "black"), dest)
 
     def render_captured(self, surface) -> None:
@@ -182,11 +182,12 @@ class GameRecord:
     """Class which handles json game data"""
     def __init__(self) -> None:
         """Initiliazes GameRecord variables"""
-        self.file_path = "game_record.json"
+        self.file_path: str = "game_record.json"
     
 
-    def update_record(self,b_c, w_c):
+    def update_record(self,b_c, w_c) -> None:
         """Will update the game record json file with the most recent game data"""
+        data: Dict[Dict[List[Tuple[int | float] | str]]]
         data = {
             "pos": {
                 "black_pos": b_c.pos,
@@ -209,17 +210,16 @@ class GameRecord:
         with open("game_record.json", "w") as f:
             json.dump(data, f,  indent=1)
 
-    def _read_record(self):
+    def _read_record(self) -> Dict[Dict[List[Tuple[int | float] | str]]] | None:
         """Returns previous game data or none"""
         try:
             with open("game_record.json", "r") as f:
                 data = json.load(f)
                 return data
         except FileNotFoundError:
-            # print(f"The file '{self.file_path}' was not found")
             return None
         
-    def _check_record(self):
+    def _check_record(self) -> True | False:
         """Returns true if previous game data exists"""
         if self._read_record():
             return True
@@ -235,6 +235,7 @@ class GameInterface(GameRecord):
         if self._check_record():
             new_or_load = input("\nWould you like to load(L) your previous game or start a new game(N)\n").title()
             if new_or_load == "L":
+                data: Dict[Dict[List[Tuple[int | float] | str]]]
                 data = self._read_record()
                 print("\nLoading previous round...")
                 self.__start(data["pos"]["black_pos"], 
@@ -267,7 +268,7 @@ class GameCheckerStatus:
         self.capt_pos: List[Tuple] = capt_pos
         self.capt_types: List[str] = capt_types
 
-    def convert_to_int(self, l_t):
+    def convert_to_int(self, l_t) -> List[Tuple[int]]:
         """Will convert possible float coordinates into integers upon initialization"""
         return [(int(x),int(y)) for x , y in l_t]
 
@@ -280,18 +281,18 @@ class GameControls:
     """Class to control game logic, turn handling and behaviour"""
     def __init__(self,  sqaure_space, black_checkers, white_checkers) -> None:
         """Initiliazes default game control settings"""
-        self.__square_space = sqaure_space
-        self.__colors = {"p1": "#d70000", "p2": "#0229bf", "indicator":"#2db83d"}
-        self.__current_player = "p1"
-        self.__players = {"p1": black_checkers, "p2": white_checkers}
-        self.__player_1_cords = self.__players["p1"].get_pos()
-        self.__player_2_cords = self.__players["p2"].get_pos()
-        self.__player_1_types = self.__players["p1"].types
-        self.__player_2_types = self.__players["p2"].types
-        self.lch = {"p1": {"selected": False,"moved": False}, "p2": {"selected": False, "moved": True}, "winner": None}
-        self.select_cord = None
-        self.current_player_cords = self.__players[self.__current_player].get_pos()
-        self.font = font.Font("static/fonts/DaniloCatalina.ttf", )
+        self.__square_space: Tuple[float] = sqaure_space
+        self.__colors: Dict[str] = {"p1": "#d70000", "p2": "#0229bf", "indicator":"#2db83d"}
+        self.__current_player: str = "p1"
+        self.__players: Dict[GameCheckerStatus] = {"p1": black_checkers, "p2": white_checkers}
+        self.__player_1_cords: List[Tuple[int]] = self.__players["p1"].get_pos()
+        self.__player_2_cords: List[Tuple[int]] = self.__players["p2"].get_pos()
+        self.__player_1_types: List[str] = self.__players["p1"].types
+        self.__player_2_types: List[str] = self.__players["p2"].types
+        self.lch: Dict[Dict[bool] | bool | str] = {"p1": {"selected": False,"moved": False}, "p2": {"selected": False, "moved": True}, "winner": False}
+        self.select_cord: Tuple[float] = None
+        self.current_player_cords: List[Tuple[int]] = self.__players[self.__current_player].get_pos()
+        self.font: font.Font = font.Font("static/fonts/DaniloCatalina.ttf", )
 
 
     def render_selection(self,surface):
@@ -300,26 +301,26 @@ class GameControls:
                 if self.__current_player == "p1":
                     if self.select_cord in self.__player_1_cords:
                         self.__render_authorized_positions(surface)
-                        pos = (self.select_cord[0] * self.__square_space[0], self.select_cord[1] * self.__square_space[0])
+                        pos: Tuple[float, float] = (self.select_cord[0] * self.__square_space[0], self.select_cord[1] * self.__square_space[0])
                         draw.rect(surface, self.__colors[self.__current_player], [pos, self.__square_space], 3)
                 
                 """Check if player has selected a white(p2) piece when white is the current player"""
                 if self.__current_player == "p2":
                     if self.select_cord in self.__player_2_cords:
                         self.__render_authorized_positions(surface)
-                        pos = (self.select_cord[0] * self.__square_space[0], self.select_cord[1] * self.__square_space[0])
+                        pos: Tuple[float, float] = (self.select_cord[0] * self.__square_space[0], self.select_cord[1] * self.__square_space[0])
                         draw.rect(surface, self.__colors[self.__current_player], [pos, self.__square_space], 3)
 
-    def set_current_player(self, player):
+    def set_current_player(self, player: str):
          """Setter for current player"""
          self.__current_player = player
 
-    def get_current_player(self):
+    def get_current_player(self) -> str:
         """Getter for current player"""
         return self.__current_player
 
 
-    def evaluate_positions(self):
+    def __evaluate_positions(self) -> List[List[Tuple[int | float]]]:
         """Checks for all the possible moves for each piece of the current player"""
         all_possible_positions: List[List[Tuple]] = []
         possible_positions: List[Tuple] = []
@@ -349,9 +350,9 @@ class GameControls:
             
         return all_possible_positions
     
-    def __eval_men(self, cord):
+    def __eval_men(self, cord) -> List[Tuple[int | float]]:
         """Checks and validates all possible moves for a given man piece"""
-        possible_positions = []
+        possible_positions: List[Tuple[int | float]] = []
         if self.__current_player == "p1":
                 # Initiliaze possible positions
                 r_d = (cord[0] + 1, cord[1] + 1)
@@ -454,7 +455,7 @@ class GameControls:
     def return_authorized_positions(self):
          """Returns the player coordinates at the index of the click selection"""
          if self.return_selection() is not None:
-              return self.evaluate_positions()[self.return_selection()]
+              return self.__evaluate_positions()[self.return_selection()]
          return []
     
     def __render_authorized_positions(self, surface):
