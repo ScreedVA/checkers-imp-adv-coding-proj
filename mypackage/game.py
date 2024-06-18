@@ -210,7 +210,7 @@ class GameRecord:
         with open("game_record.json", "w") as f:
             json.dump(data, f,  indent=1)
 
-    def _read_record(self) -> Dict[Dict[List[Tuple[int | float] | str]]] | None:
+    def _read_record(self) -> Dict | None:
         """Returns previous game data or none"""
         try:
             with open("game_record.json", "r") as f:
