@@ -44,7 +44,7 @@ def start(b_pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1),
         p2_cords = gc.get_player_2_cords()
         p1_cords = gc.get_player_1_cords()
         current_player = gc.get_current_player()
-        valid_options = gc.return_valid_options()
+        valid_options = gc.return_authorized_positions()
         life_cycle_hook = gc.get_life_cycle_hook()
         select_cord = gc.select_cord
 

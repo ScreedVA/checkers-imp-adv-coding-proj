@@ -14,6 +14,7 @@ class GameBoardDef:
         self._colors = {"bg": "#ffe4ba",
                          "square": "#e3ae5c",
                          "border": "black"}
+        self._squares = 64
         self._bc = b_c
         self._wc = w_c
 
@@ -30,7 +31,9 @@ class GameBoard(GameBoardDef):
     def font_init(self):
         self.gs_font = font.SysFont('timesnewroman', int(self.get_square_size() * 0.9))
         self.w_font = font.SysFont('timesnewroman', int(self.get_square_size() * 0.9))
-            
+
+    def get_squares(self):
+        return self._squares   
 
 
     def get_board_size(self):
@@ -62,57 +65,76 @@ class GameBoard(GameBoardDef):
         """Renders 32 squares squares, 9 vertical and 9 horizontal lines onto the screen
         (excecutes render_pieces(), render_game_status() and render_captures() functions)"""
         surface.fill(self.get_bg_color())
-        iterator = 0
+        n = 0
         mod = 4
-        while iterator < 32:
-            y = iterator // mod
-            x = iterator % mod
+        while n < self._squares // 2:
+            y = n // mod
+            x = n % mod
             diff = x * (self.get_square_size() * 2) # diff = (0 -> 200 -> 400 -> 600)
             if y % 2 != 0:
                 """Draw gray square when y =(1 -> 3 -> 5 -> 7)"""
-                draw.rect(surface, self.get_square_color(), [((self._width * 0.7 - diff), (y * self.get_square_size())), self.get_square_space()])
+                pos_size = [((self._width * 0.7 - diff), (y * self.get_square_size())), self.get_square_space()]
+                draw.rect(surface, self.get_square_color(), pos_size)
             else:
                 """Draw gray square when y = (0 -> 2 -> 4 -> 6)"""
-                draw.rect(surface, self.get_square_color(), [((self._width * 0.6 - diff), (y * self.get_square_size())), self.get_square_space()])
-            iterator += 1
-        iterator = 0
-        while iterator < 9:
-            """Draw horizontal border lines"""
-            draw.line(surface, self.get_border_color(), (0, iterator * self.get_square_size()), (self._width * 0.8, iterator * self.get_square_size()))
-            """Draw vertical border lines"""
-            draw.line(surface, self.get_border_color(), (iterator * self.get_square_size(), 0), (iterator * self.get_square_size(), self._height * 0.8))
-            iterator += 1
-        """Draw border for game status view """
-        draw.rect(surface, self.get_border_color(), [(0, self._height * 0.8),(self._width * 0.8, self._height * 0.2 )], 3)
-        """Draw border for captured men view"""
-        draw.rect(surface, self.get_border_color(), [(self._width * 0.8, 0),(self._width * 0.2, self._height * 0.8)], 3)
-        
+                pos_size = [((self._width * 0.6 - diff), (y * self.get_square_size())), self.get_square_space()]
+                draw.rect(surface, self.get_square_color(), pos_size)
+            n += 1
+    
+        self.render_borders(surface)
+
         self.render_pieces(surface)
 
         self.render_game_status(surface)
 
         self.render_captured(surface)
 
-    def render_pieces(self, surface):
+    def render_borders(self, surface) -> None:
+        n = 0
+        while n < 9:
+            """Initialize render positions"""
+            hor_start = (0, n * self.get_square_size())
+            hor_end = (self._width * 0.8, n * self.get_square_size())
+            vert_start = (n * self.get_square_size(), 0)
+            vert_end = (n * self.get_square_size(), self._height * 0.8)
+            """Draw horizontal border lines"""
+            draw.line(surface, self.get_border_color(), hor_start, hor_end)
+            """Draw vertical border lines"""
+            draw.line(surface, self.get_border_color(), vert_start, vert_end)
+            n += 1
+        """Draw border for game status view """
+        gs_pos_size: List[Tuple[int]] = [(0, self._height * 0.8),(self._width * 0.8, self._height * 0.2 )]
+        capt_pos_size: List[Tuple[int]] = [(self._width * 0.8, 0),(self._width * 0.2, self._height * 0.8)]
+        draw.rect(surface, self.get_border_color(), gs_pos_size, 3)
+        """Draw border for captured men view"""
+        draw.rect(surface, self.get_border_color(), capt_pos_size, 3)
+
+
+
+    def render_pieces(self, surface) -> None:
         """Renders each piece in CheckStatus.pos object lists onto the board when called"""
         for i in range(len(self._bc.get_pos())):
             # Check if black piece is a man
             if self._bc.types[i] == "man":
-                surface.blit(self.__img_h.get_black_checker(), (self._bc.get_pos()[i][0] * self.get_square_size(), self._bc.get_pos()[i][1] * self.get_square_size()))
+                coord_pos: Tuple[int] = (self._bc.get_pos()[i][0] * self.get_square_size(), self._bc.get_pos()[i][1] * self.get_square_size())
+                surface.blit(self.__img_h.get_black_checker(), coord_pos)
             # Check if black piece is a king
             elif self._bc.types[i] == "king":
-                surface.blit(self.__img_h.get_black_king(), (self._bc.get_pos()[i][0] * self.get_square_size(), self._bc.get_pos()[i][1] * self.get_square_size()))
+                coord_pos: Tuple[int] = (self._bc.get_pos()[i][0] * self.get_square_size(), self._bc.get_pos()[i][1] * self.get_square_size())
+                surface.blit(self.__img_h.get_black_king(), coord_pos)
 
         for i in range(len(self._wc.get_pos())):
             # Check if white piece is a man 
             if self._wc.types[i] == "man":
-                surface.blit(self.__img_h.get_white_checker(), (self._wc.get_pos()[i][0] * self.get_square_size(), self._wc.get_pos()[i][1] * self.get_square_size()))
+                coord_pos: Tuple = (self._wc.get_pos()[i][0] * self.get_square_size(), self._wc.get_pos()[i][1] * self.get_square_size())
+                surface.blit(self.__img_h.get_white_checker(), coord_pos)
         # Check if white piece is a king
             elif self._wc.types[i] == "king":
-                surface.blit(self.__img_h.get_white_king(), (self._wc.get_pos()[i][0] * self.get_square_size(), self._wc.get_pos()[i][1] * self.get_square_size()))
+                coord_pos: Tuple = (self._wc.get_pos()[i][0] * self.get_square_size(), self._wc.get_pos()[i][1] * self.get_square_size())
+                surface.blit(self.__img_h.get_white_king(), coord_pos)
 
 
-    def render_game_status(self, surface):
+    def render_game_status(self, surface) -> None:
         """Render the game message prompts to players"""
         dest = (self.get_square_size() * 0.1, self._height * 0.85)
         if self.__gc.lch["p2"]["moved"]:
@@ -124,23 +146,27 @@ class GameBoard(GameBoardDef):
         if self.__gc.lch["p2"]["selected"]:
             surface.blit(self.gs_font.render("White move a Piece", True, "black"), dest)
 
-    def render_captured(self, surface):
+    def render_captured(self, surface) -> None:
         """Renders all captured pieces at the right side of the screen"""
         for i in range(len(self._bc.capt_types)):
             # Check if white piece is a man or king
             if self._bc.capt_types[i] == "man":
-                surface.blit(self.__img_h.get_white_checker("small"), (self._width * 0.8, i * self.get_square_size() // 2))
+                coord_pos: Tuple[int] = (self._width * 0.8, i * self.get_square_size() // 2)
+                surface.blit(self.__img_h.get_white_checker("small"), coord_pos)
             elif self._bc.capt_types[i] == "king":
-                surface.blit(self.__img_h.get_white_king("small"), (self._width * 0.8, i * self.get_square_size() // 2))
+                coord_pos: Tuple[int] = (self._width * 0.8, i * self.get_square_size() // 2)
+                surface.blit(self.__img_h.get_white_king("small"), coord_pos)
         
         for i in range(len(self._wc.capt_types)):
             # Check if black piece is a man or king
             if self._wc.capt_types[i] == "man":
-                surface.blit(self.__img_h.get_black_checker("small"), (self._width * 0.9, i * self.get_square_size() // 2))
+                coord_pos: Tuple[int] = (self._width * 0.9, i * self.get_square_size() // 2)
+                surface.blit(self.__img_h.get_black_checker("small"), coord_pos)
             elif self._wc.capt_types[i] == "king":
-                surface.blit(self.__img_h.get_black_king("small"), (self._width * 0.9, i * self.get_square_size() // 2))
+                coord_pos: Tuple[int] = (self._width * 0.9, i * self.get_square_size() // 2)
+                surface.blit(self.__img_h.get_black_king("small"), coord_pos)
         
-    def render_winner(self, surface):
+    def render_winner(self, surface) -> None:
         """Renders winning text when life cycle hook detects a winner"""
         dest = (self._width * 0.05, self._height * 0.3)
         if self.__gc.lch["winner"] == "black(p1)":
@@ -269,14 +295,14 @@ class GameControls:
                 """Check if player has selected a black(p1) piece when black is the current player"""
                 if self.__current_player == "p1":
                     if self.select_cord in self.__player_1_cords:
-                        self.__render_valid_options(surface)
+                        self.__render_authorized_positions(surface)
                         pos = (self.select_cord[0] * self.__square_space[0], self.select_cord[1] * self.__square_space[0])
                         draw.rect(surface, self.__colors[self.__current_player], [pos, self.__square_space], 3)
                 
                 """Check if player has selected a white(p2) piece when white is the current player"""
                 if self.__current_player == "p2":
                     if self.select_cord in self.__player_2_cords:
-                        self.__render_valid_options(surface)
+                        self.__render_authorized_positions(surface)
                         pos = (self.select_cord[0] * self.__square_space[0], self.select_cord[1] * self.__square_space[0])
                         draw.rect(surface, self.__colors[self.__current_player], [pos, self.__square_space], 3)
 
@@ -289,40 +315,41 @@ class GameControls:
         return self.__current_player
 
 
-    def check_options(self):
+    def evaluate_positions(self):
         """Checks for all the possible moves for each piece of the current player"""
-        all_moves = []
-        moves_list = []
+        all_possible_positions: List[List[Tuple]] = []
+        possible_positions: List[Tuple] = []
         if self.__current_player == "p1":
             for i in range(len(self.__player_1_cords)):
                 # Check if black player(p1) piece is a man
                 if self.__player_1_types[i] == "man":
-                    moves_list = self.__check_men(self.__player_1_cords[i])
-                    all_moves.append(moves_list)
+                    possible_positions = self.__eval_men(self.__player_1_cords[i])
+                    all_possible_positions.append(possible_positions)
                 # check if black player(p1) piece is a king
                 elif self.__player_1_types[i] == "king":
-                    moves_list = self.__check_king(self.__player_1_cords[i])
-                    all_moves.append(moves_list)
+                    possible_positions = self.__eval_king(self.__player_1_cords[i])
+                    all_possible_positions.append(possible_positions)
 
 
         elif self.__current_player == "p2":
             for i  in range(len(self.__player_2_cords)):
                 # Check if white player(p2) piece is a man
                 if self.__player_2_types[i] == "man":
-                    moves_list = self.__check_men(self.__player_2_cords[i])
-                    all_moves.append(moves_list)
+                    possible_positions = self.__eval_men(self.__player_2_cords[i])
+                    all_possible_positions.append(possible_positions)
                 # Check if white player(p2) piece is a king
                 elif self.__player_2_types[i] == "king":
-                    moves_list = self.__check_king(self.__player_2_cords[i])
-                    all_moves.append(moves_list)
+                    possible_positions = self.__eval_king(self.__player_2_cords[i])
+                    all_possible_positions.append(possible_positions)
                      
             
-        return all_moves
+        return all_possible_positions
     
-    def __check_men(self, cord):
+    def __eval_men(self, cord):
         """Checks and validates all possible moves for a given man piece"""
-        moves_list = []
+        possible_positions = []
         if self.__current_player == "p1":
+                # Initiliaze possible positions
                 r_d = (cord[0] + 1, cord[1] + 1)
                 l_d = (cord[0] - 1, cord[1] + 1)
                 r_d_2x = (cord[0] + 2, cord[1] + 2)
@@ -330,19 +357,20 @@ class GameControls:
                 if 0 <= cord[0] <= 7 and cord[1] <= 7:
                     # Check if position at 1 right and 1 down is valid
                     if (r_d not in self.__player_2_cords) and (r_d not in self.__player_1_cords) and (0 <= cord[0] + 1 <= 7) and (0 <= cord[1] + 1 <= 7):
-                        moves_list.append(r_d)
+                        possible_positions.append(r_d)
                     # Check if position at 1 left and 1 down is valid
                     if (l_d not in self.__player_2_cords) and (l_d not in self.__player_1_cords) and (0 <= cord[0] - 1 <= 7) and (0 <= cord[1] + 1 <= 7):
-                         moves_list.append(l_d)
+                         possible_positions.append(l_d)
                     # Check if position at 2 right and 2 down is valid
                     if (r_d_2x not in self.__player_1_cords) and (r_d_2x not in self.__player_2_cords) and (r_d not in self.__player_1_cords) and (0 <= cord[0] + 2 <= 7) and (0 <= cord[1] + 2 <= 7) and (r_d in self.__player_2_cords):
-                         moves_list.append(r_d_2x)
+                         possible_positions.append(r_d_2x)
                     # Check if position at 2 left and 2 down is valid
                     if (l_d_2x not in self.__player_1_cords) and  (l_d_2x not in self.__player_2_cords) and (l_d not in self.__player_1_cords) and (0 <= cord[0] - 2 <= 7) and (0 <= cord[1] + 2 <= 7) and (l_d in self.__player_2_cords):
-                        moves_list.append(l_d_2x)
+                        possible_positions.append(l_d_2x)
         
         
         if self.__current_player == "p2":
+                # Initiliaze possible positions
                 r_t = (cord[0] + 1, cord[1] - 1)
                 l_t = (cord[0] - 1, cord[1] - 1)
                 r_t_2x = (cord[0] + 2, cord[1] - 2)
@@ -350,23 +378,24 @@ class GameControls:
                 if cord[0] <= 7 and cord[0] >= 0 and (cord[1] <= 7):
                     # Check if position at 1 right and 1 up is valid
                     if (r_t not in self.__player_2_cords) and (r_t not in self.__player_1_cords) and (0 <= (cord[0] + 1) <= 7):
-                        moves_list.append(r_t)
+                        possible_positions.append(r_t)
                     # Check if position at 1 left and 1 up is valid
                     if (l_t not in self.__player_2_cords) and (l_t not in self.__player_1_cords) and (0 <= (cord[0] - 1) <= 7):
-                            moves_list.append(l_t)
+                            possible_positions.append(l_t)
                     # Check if position at 2 right and 2 up is valid
                     if (r_t_2x not in self.__player_2_cords) and  (r_t_2x not in self.__player_1_cords) and (r_t not in self.__player_2_cords) and (0 <= cord[0] + 2 <= 7) and (r_t in self.__player_1_cords):
-                            moves_list.append(r_t_2x)
+                            possible_positions.append(r_t_2x)
                     # Check if position at 2 left and 2 up is valid
                     if (l_t_2x not in self.__player_2_cords) and (l_t_2x not in self.__player_1_cords) and (l_t not in self.__player_2_cords) and (0 <= cord[0] - 2 <= 7) and (l_t in self.__player_1_cords):
-                        moves_list.append(l_t_2x)
-        return moves_list
+                        possible_positions.append(l_t_2x)
+        return possible_positions
 
-    def __check_king(self, cord):
+    def __eval_king(self, cord):
         """Checks and validates all possible moves for a given king piece"""
-        moves_list = self.__check_men(cord)
+        possible_positions = self.__eval_men(cord)
         
         if self.__current_player == "p1":
+                # Initiliaze possible positions
                 r_t = (cord[0] + 1, cord[1] - 1)
                 l_t = (cord[0] - 1, cord[1] - 1)
                 r_t_2x = (cord[0] + 2, cord[1] - 2)
@@ -374,18 +403,19 @@ class GameControls:
                 if (cord[0] <= 7) and (cord[0] >= 0) and (cord[1] <= 7):
                     # Check if position at 1 right and 1 up is valid
                     if (r_t not in self.__player_2_cords) and (r_t not in self.__player_1_cords) and (0 <= (cord[0] + 1) <= 7):
-                        moves_list.append(r_t)
+                        possible_positions.append(r_t)
                     # Check if position at 1 left and 1 up is valid
                     if (l_t not in self.__player_2_cords) and (l_t not in self.__player_1_cords) and (0 <= (cord[0] - 1) <= 7):
-                            moves_list.append(l_t)
+                            possible_positions.append(l_t)
                     # Check if position at 2 right and 2 up is valid
                     if (r_t_2x not in self.__player_2_cords) and  (r_t_2x not in self.__player_1_cords) and (r_t not in self.__player_1_cords) and (0 <= cord[0] + 2 <= 7) and (r_t in self.__player_2_cords):
-                            moves_list.append(r_t_2x)
+                            possible_positions.append(r_t_2x)
                     # Check if position at 2 left and 2 up is valid
                     if (l_t_2x not in self.__player_2_cords) and (l_t_2x not in self.__player_1_cords) and (l_t not in self.__player_1_cords) and (0 <= cord[0] - 2 <= 7) and (l_t in self.__player_2_cords):
-                        moves_list.append(l_t_2x)
+                        possible_positions.append(l_t_2x)
 
         if self.__current_player == "p2":
+                # Initiliaze possible positions
                 r_d = (cord[0] + 1, cord[1] + 1)
                 l_d = (cord[0] - 1, cord[1] + 1)
                 r_d_2x = (cord[0] + 2, cord[1] + 2)
@@ -393,17 +423,17 @@ class GameControls:
                 if (0 <= cord[0] <= 7) and (cord[1] <= 7):
                     # Check if position at 1 right and 1 down is valid
                     if r_d not in self.__player_2_cords and r_d not in self.__player_1_cords and 0 <= cord[0] + 1 <= 7:
-                        moves_list.append(r_d)
+                        possible_positions.append(r_d)
                     # Check if position at 1 left and 1 down is valid
                     if l_d not in self.__player_2_cords and l_d not in self.__player_1_cords and 0 <= cord[0] - 1 <= 7:
-                         moves_list.append(l_d)
+                         possible_positions.append(l_d)
                     # Check if position at 2 right and 2 down is valid
                     if r_d_2x not in self.__player_1_cords and r_d_2x not in self.__player_2_cords and r_d not in self.__player_2_cords and 0 <= cord[0] + 2 <= 7 and r_d in self.__player_1_cords:
-                         moves_list.append(r_d_2x)
+                         possible_positions.append(r_d_2x)
                     # Check if position at 2 left and 2 down is valid
                     if l_d_2x not in self.__player_1_cords and  l_d_2x not in self.__player_2_cords and l_d not in self.__player_2_cords and 0 <= cord[0] - 2 <= 7 and l_d in self.__player_1_cords:
-                        moves_list.append(l_d_2x)
-        return moves_list
+                        possible_positions.append(l_d_2x)
+        return possible_positions
 
     def return_selection(self):
         """Return the click selection index if it is current_player_cords list"""
@@ -417,15 +447,15 @@ class GameControls:
                 return self.__player_2_cords.index(self.select_cord)
         return None
 
-    def return_valid_options(self):
+    def return_authorized_positions(self):
          """Returns the player coordinates at the index of the click selection"""
          if self.return_selection() is not None:
-              return self.check_options()[self.return_selection()]
+              return self.evaluate_positions()[self.return_selection()]
          return []
     
-    def __render_valid_options(self, surface):
+    def __render_authorized_positions(self, surface):
          """Renders a green circle indicator at each position in the valid options list"""
-         for cord in self.return_valid_options():
+         for cord in self.return_authorized_positions():
               x = (cord[0] * self.__square_space[0]) + self.__square_space[0] / 2
               y = (cord[1] * self.__square_space[0]) + self.__square_space[0] / 2
               draw.circle(surface, self.__colors["indicator"], (x, y), 5)
