@@ -35,7 +35,7 @@ def start(b_pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1),
     
 
     while running:
-        gb.render_board(screen)
+        gb.render_game_env(screen)
         gc.render_selection(screen)
         gb.render_winner(screen)
 

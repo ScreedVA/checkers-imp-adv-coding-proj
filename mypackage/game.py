@@ -58,25 +58,30 @@ class GameBoard(GameBoardDef):
         return (self._width // 10)
 
     
-    def render_board(self, surface): 
+    def render_game_env(self, surface): 
         """Renders 32 squares squares, 9 vertical and 9 horizontal lines onto the screen
         (excecutes render_pieces(), render_game_status() and render_captures() functions)"""
         surface.fill(self.get_bg_color())
-        for i in range(32):
-            y = i // 4
-            x = i % 4
+        iterator = 0
+        mod = 4
+        while iterator < 32:
+            y = iterator // mod
+            x = iterator % mod
             diff = x * (self.get_square_size() * 2) # diff = (0 -> 200 -> 400 -> 600)
-            if y % 2 == 0:
-                """Draw gray square when y = (0 -> 2 -> 4 -> 6)"""
-                draw.rect(surface, self.get_square_color(), [((self._width * 0.6 - diff), (y * self.get_square_size())), self.get_square_space()])
-            else:
+            if y % 2 != 0:
                 """Draw gray square when y =(1 -> 3 -> 5 -> 7)"""
                 draw.rect(surface, self.get_square_color(), [((self._width * 0.7 - diff), (y * self.get_square_size())), self.get_square_space()])
-        for i in range(9):
+            else:
+                """Draw gray square when y = (0 -> 2 -> 4 -> 6)"""
+                draw.rect(surface, self.get_square_color(), [((self._width * 0.6 - diff), (y * self.get_square_size())), self.get_square_space()])
+            iterator += 1
+        iterator = 0
+        while iterator < 9:
             """Draw horizontal border lines"""
-            draw.line(surface, self.get_border_color(), (0, i * self.get_square_size()), (self._width * 0.8, i * self.get_square_size()))
+            draw.line(surface, self.get_border_color(), (0, iterator * self.get_square_size()), (self._width * 0.8, iterator * self.get_square_size()))
             """Draw vertical border lines"""
-            draw.line(surface, self.get_border_color(), (i * self.get_square_size(), 0), (i * self.get_square_size(), self._height * 0.8))
+            draw.line(surface, self.get_border_color(), (iterator * self.get_square_size(), 0), (iterator * self.get_square_size(), self._height * 0.8))
+            iterator += 1
         """Draw border for game status view """
         draw.rect(surface, self.get_border_color(), [(0, self._height * 0.8),(self._width * 0.8, self._height * 0.2 )], 3)
         """Draw border for captured men view"""
