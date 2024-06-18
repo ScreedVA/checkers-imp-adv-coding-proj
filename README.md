@@ -127,3 +127,9 @@ Loading previous round...
 - Json libary handles python dictionary to json serialization
 
 
+## Sources
+The render_game_env() method which utilizes modular congruences to asses rows and columns to draw evenly positioned squares is inspired from an article by Sundar Sing - Singh, S. (2017, December 10). [D3: Modulo operation to create a grid.](https://medium.com/@eesur/d3-modulo-operation-to-create-a-grid-f47101831a ) 
+
+
+
+
