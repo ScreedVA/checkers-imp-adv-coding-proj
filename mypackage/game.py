@@ -1,14 +1,17 @@
 from pygame import draw, font
 from typing import List, Tuple, Dict
+from mypackage.utility import ImageHandler
 import json
 import time
 font.init()
 
 
 
-class GameBoardDef:
+
+class GameBoard(ImageHandler):
+    """Class to handle game board functionality"""
     def __init__(self, b_c, w_c, w, h, diff=1) -> None:
-        """Initiliazs default game board settings"""
+        super().__init__()
         self._width: int = w * diff
         self._height: int = h * diff
         self._colors: Dict[str]= {"bg": "#ffe4ba",
@@ -17,15 +20,12 @@ class GameBoardDef:
         self._squares: int = 64
         self._bc: GameCheckerStatus = b_c
         self._wc: GameCheckerStatus = w_c
-
-class GameBoard(GameBoardDef):
-    """Class to handle game board functionality"""
-    def __init__(self, b_c, w_c, w, h, diff=1) -> None:
-        super().__init__(b_c, w_c, w, h, diff)
+        self._size = self.get_square_space()
+        self._size_small =  (self._size[0] // 2, self._size[1] // 2)
         self.font_init()
+        
 
-    def post_init(self, image_handler, game_controls):
-        self.__img_h = image_handler
+    def post_init(self, game_controls):
         self.__gc = game_controls
     
     def font_init(self):
@@ -121,21 +121,21 @@ class GameBoard(GameBoardDef):
             # Check if black piece is a man
             if self._bc.types[i] == "man":
                 coord_pos: Tuple[int] = (self._bc.get_pos()[i][0] * self.get_square_size(), self._bc.get_pos()[i][1] * self.get_square_size())
-                surface.blit(self.__img_h.get_black_checker(), coord_pos)
+                surface.blit(self.get_black_checker(), coord_pos)
             # Check if black piece is a king
             elif self._bc.types[i] == "king":
                 coord_pos: Tuple[int] = (self._bc.get_pos()[i][0] * self.get_square_size(), self._bc.get_pos()[i][1] * self.get_square_size())
-                surface.blit(self.__img_h.get_black_king(), coord_pos)
+                surface.blit(self.get_black_king(), coord_pos)
 
         for i in range(len(self._wc.get_pos())):
             # Check if white piece is a man 
             if self._wc.types[i] == "man":
                 coord_pos: Tuple = (self._wc.get_pos()[i][0] * self.get_square_size(), self._wc.get_pos()[i][1] * self.get_square_size())
-                surface.blit(self.__img_h.get_white_checker(), coord_pos)
+                surface.blit(self.get_white_checker(), coord_pos)
         # Check if white piece is a king
             elif self._wc.types[i] == "king":
                 coord_pos: Tuple = (self._wc.get_pos()[i][0] * self.get_square_size(), self._wc.get_pos()[i][1] * self.get_square_size())
-                surface.blit(self.__img_h.get_white_king(), coord_pos)
+                surface.blit(self.get_white_king(), coord_pos)
 
 
     def render_game_status(self, surface) -> None:
@@ -156,19 +156,19 @@ class GameBoard(GameBoardDef):
             # Check if white piece is a man or king
             if self._bc.capt_types[i] == "man":
                 coord_pos: Tuple[int] = (self._width * 0.8, i * self.get_square_size() // 2)
-                surface.blit(self.__img_h.get_white_checker("small"), coord_pos)
+                surface.blit(self.get_white_checker("small"), coord_pos)
             elif self._bc.capt_types[i] == "king":
                 coord_pos: Tuple[int] = (self._width * 0.8, i * self.get_square_size() // 2)
-                surface.blit(self.__img_h.get_white_king("small"), coord_pos)
+                surface.blit(self.get_white_king("small"), coord_pos)
         
         for i in range(len(self._wc.capt_types)):
             # Check if black piece is a man or king
             if self._wc.capt_types[i] == "man":
                 coord_pos: Tuple[int] = (self._width * 0.9, i * self.get_square_size() // 2)
-                surface.blit(self.__img_h.get_black_checker("small"), coord_pos)
+                surface.blit(self.get_black_checker("small"), coord_pos)
             elif self._wc.capt_types[i] == "king":
                 coord_pos: Tuple[int] = (self._width * 0.9, i * self.get_square_size() // 2)
-                surface.blit(self.__img_h.get_black_king("small"), coord_pos)
+                surface.blit(self.get_black_king("small"), coord_pos)
         
     def render_winner(self, surface) -> None:
         """Renders winning text when life cycle hook detects a winner"""
@@ -350,7 +350,7 @@ class GameControls:
             
         return all_possible_positions
     
-    def __eval_men(self, cord) -> List[Tuple[int | float]]:
+    def __eval_men(self, cord: Tuple[int | float]) -> List[Tuple[int | float]]:
         """Checks and validates all possible moves for a given man piece"""
         possible_positions: List[Tuple[int | float]] = []
         if self.__current_player == "p1":

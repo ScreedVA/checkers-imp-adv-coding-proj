@@ -24,9 +24,8 @@ def start(b_pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1),
     black_checkers = GameCheckerStatus(b_pos, b_types, b_capt_pos, b_capt_types)
     white_checkers = GameCheckerStatus(w_pos, w_types, w_capt_pos, w_capt_types)
     gb = GameBoard(black_checkers, white_checkers, SCREEN_WIDTH, SCREEN_HEIGHT, 0.65)
-    img_h = ImageHandler((gb.get_square_space()))
     gc = GameControls(gb.get_square_space(), black_checkers, white_checkers)
-    gb.post_init(image_handler=img_h, game_controls=gc)
+    gb.post_init(game_controls=gc)
 
     """Initializing Default GUI Settings"""
     screen = pygame.display.set_mode(gb.get_board_size())
@@ -70,6 +69,8 @@ def start(b_pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1),
                 print("\n")
                 print(f"Selection coordinates (previous): {select_cord}")
                 print(f"Selection coordinates (current): {gc.select_cord}")
+                print(f"Small Size {gb._size_small}")
+                print(f"Normal Size {gb._size}")
                 print("\n\n")
                 print("<----- DEBUG STATEMENTS ----->")
                 """ ---------- UNCOMMENT TO DEBUG ---------- """
