@@ -4,8 +4,8 @@ import pygame
 __version__ = "0.1.0"
 
 
-def start(b_pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1), (0, 2), (2, 2), (4, 2), (6, 2)], 
-          w_pos=[(1, 7), (3, 7), (5, 7), (7, 7), (0, 6), (2, 6), (4, 6), (6, 6), (1, 5), (3, 5), (5, 5), (7, 5)], 
+def start(b_pos=[(2,0), (4, 0), (6, 0), (8, 0), (3, 1), (5, 1), (7, 1), (9, 1), (2, 2), (4, 2), (6, 2), (8, 2)], 
+          w_pos=[(3, 7), (5, 7), (7, 7), (9, 7), (2, 6), (4, 6), (6, 6), (8, 6), (3, 5), (5, 5), (7, 5), (9, 5)], 
           b_types=["man"] * 12, 
           w_types=["man"] * 12,
           b_capt_pos=[],
@@ -68,8 +68,7 @@ def start(b_pos=[(0, 0), (2, 0), (4, 0), (6, 0), (1, 1), (3, 1), (5, 1), (7, 1),
                 print("\n")
                 print(f"Selection coordinates (previous): {select_cord}")
                 print(f"Selection coordinates (current): {gc.select_cord}")
-                print(f"Small Size {gb._size_small}")
-                print(f"Normal Size {gb._size}")
+                print(f"Valid Moves{valid_options}")
                 print("\n\n")
                 print("<----- DEBUG STATEMENTS ----->")
                 """ ---------- UNCOMMENT TO DEBUG ---------- """

@@ -76,11 +76,11 @@ class GameBoard(ImageHandler):
             diff: int = x * (self.get_square_size() * 2) # diff = (0 -> 200 -> 400 -> 600)
             if y % 2 != 0:
                 """Draw gray square when y =(1 -> 3 -> 5 -> 7)"""
-                pos_size: List[Tuple] = [((self._width * 0.7 - diff), (y * self.get_square_size())), self.get_square_space()]
+                pos_size: List[Tuple] = [((self._width * 0.9 - diff), (y * self.get_square_size())), self.get_square_space()]
                 draw.rect(surface, self.get_square_color(), pos_size)
             else:
                 """Draw gray square when y = (0 -> 2 -> 4 -> 6)"""
-                pos_size: List[Tuple] = [((self._width * 0.6 - diff), (y * self.get_square_size())), self.get_square_space()]
+                pos_size: List[Tuple] = [((self._width * 0.8 - diff), (y * self.get_square_size())), self.get_square_space()]
                 draw.rect(surface, self.get_square_color(), pos_size)
             n += 1
     
@@ -96,18 +96,18 @@ class GameBoard(ImageHandler):
         n = 0
         while n < 9:
             """Initialize render positions"""
-            hor_start: Tuple[int] = (0, n * self.get_square_size())
-            hor_end: Tuple[int] = (self._width * 0.8, n * self.get_square_size())
-            vert_start: Tuple[int] = (n * self.get_square_size(), 0)
-            vert_end: Tuple[int] = (n * self.get_square_size(), self._height * 0.8)
+            hor_start: Tuple[int] = (self._width * 0.2, n * self.get_square_size())
+            hor_end: Tuple[int] = (self._width, n * self.get_square_size())
+            vert_start: Tuple[int] = ((self._width * 0.2) + n * self.get_square_size(), 0)
+            vert_end: Tuple[int] = ((self._width * 0.2) + n * self.get_square_size(), self._height * 0.8)
             """Draw horizontal border lines"""
             draw.line(surface, self.get_border_color(), hor_start, hor_end)
             """Draw vertical border lines"""
             draw.line(surface, self.get_border_color(), vert_start, vert_end)
             n += 1
         """Draw border for game status view """
-        gs_pos_size: List[Tuple[int]] = [(0, self._height * 0.8),(self._width * 0.8, self._height * 0.2 )]
-        capt_pos_size: List[Tuple[int]] = [(self._width * 0.8, 0),(self._width * 0.2, self._height * 0.8)]
+        gs_pos_size: List[Tuple[int]] = [(self._height * 0.2, self._height * 0.8),(self._width * 0.8, self._height * 0.2 )]
+        capt_pos_size: List[Tuple[int]] = [(0, 0),(self._width * 0.2, self._height * 0.8)]
         draw.rect(surface, self.get_border_color(), gs_pos_size, 3)
         """Draw border for captured men view"""
         draw.rect(surface, self.get_border_color(), capt_pos_size, 3)
@@ -139,7 +139,7 @@ class GameBoard(ImageHandler):
 
     def render_game_status(self, surface) -> None:
         """Render the game message prompts to players"""
-        dest: Tuple[float] = (self.get_square_size() * 0.1, self._height * 0.85)
+        dest: Tuple[float] = (self._width * 0.23, self._height * 0.85)
         if self.__gc.lch["p2"]["moved"]: # Checks if it is black's turn to select a piece
             surface.blit(self.gs_font.render("Black select a Piece", True, "black"), dest)
         if self.__gc.lch["p1"]["selected"]:# Checks if it is black's turn to move a piece
@@ -153,7 +153,7 @@ class GameBoard(ImageHandler):
         """Renders all captured pieces at the right side of the screen"""
         for i in range(len(self._bc.capt_types)):
             # Check if white piece is a man or king
-            x = self._width * 0.8
+            x = self._width * 0.01
             y = (self._height * 0.7 - (i * self.get_square_size() // 2))
             if self._bc.capt_types[i] == "man":
                 coord_pos: Tuple[int] = (x, y)
@@ -164,7 +164,7 @@ class GameBoard(ImageHandler):
         
         for i in range(len(self._wc.capt_types)):
             # Check if black piece is a man or king
-            x = self._width * 0.9
+            x = self._width * 0.1
             y = (self._height * 0.7 - (i * self.get_square_size() // 2))
             if self._wc.capt_types[i] == "man":
                 coord_pos: Tuple[int] = (x, y)
@@ -187,8 +187,6 @@ class GameInterface(RecordHandler):
     def __init__(self, start) -> None:
         super().__init__()
         self.__start = start
-
-
 
     def configure_game(self):
         # Checks if user has a previously saved game

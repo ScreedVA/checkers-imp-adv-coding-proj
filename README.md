@@ -1,4 +1,4 @@
-# Checkers Implementation in Python 
+# 🏁 Checkers Implementation in Python 
 > Built within the pygame framework as a university project
 
 ## Table of Contents
@@ -128,8 +128,8 @@ Loading previous round...
 
 
 ## Sources
-The render_game_env() method which utilizes modular congruences to asses rows and columns to draw evenly positioned squares is inspired from an article by Sundar Sing - Singh, S. (2017, December 10). [D3: Modulo operation to create a grid.](https://medium.com/@eesur/d3-modulo-operation-to-create-a-grid-f47101831a ) 
+- The render_game_env() method which utilizes modular congruences to asses rows and columns to draw evenly positioned squares is inspired from an article by Sundar Sing - Singh, S. (2017, December 10). [D3: Modulo operation to create a grid.](https://medium.com/@eesur/d3-modulo-operation-to-create-a-grid-f47101831a ) 
 
-
+- The game images used throughout the project are by "andi" on [OpenGameart.ORG](https://opengameart.org/content/checkers) 
 
 
