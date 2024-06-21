@@ -61,7 +61,7 @@ mkdir checkers-imp-adv-code-proj-techscreed
 
 Enter directory
 ```bash
-cd checkers-imp-adv-code-proj-techscreed
+cd checkers-imp-adv-coding-proj-techscreed
 ```
 
 Create virtual environment
@@ -76,7 +76,7 @@ Activate virtual environment
 
 Install package from Pypi
 ```bash
-pip install checkers-imp-adv-code-proj
+pip install checkers-imp-adv-coding-proj
 ```
 
 ## Usage

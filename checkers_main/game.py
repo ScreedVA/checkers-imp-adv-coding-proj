@@ -1,7 +1,8 @@
 from pygame import draw, font, Surface
 from typing import List, Tuple, Dict
-from mypackage.utility import ImageHandler, KingHandler, RecordHandler
+from checkers_main.utility import ImageHandler, KingHandler, RecordHandler
 import time
+import pkg_resources
 font.init()
 
 
@@ -39,7 +40,7 @@ class GameBoard(ImageHandler):
         """Getter which returns size of game board"""
         return (self._width, self._height)
         
-    def get_bg_color(self):
+    def get_bg_color(self) -> str:
         """Getter which returns background color from colors dictionary"""
         return self._colors["bg"]
     
@@ -251,7 +252,7 @@ class GameControls(KingHandler):
         self.lch: Dict[Dict[bool] | bool | str] = {"p1": {"selected": False,"moved": False}, "p2": {"selected": False, "moved": True}, "winner": False}
         self.select_cord: Tuple[float] = None
         self.current_player_cords: List[Tuple[int]] = self.__players[self._current_player].get_pos()
-        self.font: font.Font = font.Font("static/fonts/DaniloCatalina.ttf", )
+        self.font: font.Font = font.SysFont('timesnewroman', int(self.__square_space[0] * 0.9))
 
 
     def render_selection(self, surface: Surface):

@@ -1,7 +1,7 @@
 from .game import GameBoard, GameCheckerStatus, GameInterface, GameControls
 import pygame
 
-__version__ = "0.1.0"
+__version__ = "0.1.5"
 
 
 def start(b_pos=[(2,0), (4, 0), (6, 0), (8, 0), (3, 1), (5, 1), (7, 1), (9, 1), (2, 2), (4, 2), (6, 2), (8, 2)], 
@@ -111,7 +111,7 @@ def start(b_pos=[(2,0), (4, 0), (6, 0), (8, 0), (3, 1), (5, 1), (7, 1), (9, 1), 
                         gc.lch["p1"]["moved"] = True
                         gc.lch["p1"]["selected"] = False
 
-                """Check if its player 2's turn"""
+                """Check if it's player 2's turn"""
                 if current_player == "p2":
                     if clicked_cord in p2_cords:
                         gc.lch["p2"]["selected"] = True
@@ -166,4 +166,6 @@ g_i = GameInterface(start)
 
 def main():
     g_i.configure_game()
+
+
 

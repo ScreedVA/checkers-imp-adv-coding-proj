@@ -2,16 +2,18 @@ from PIL import Image
 from pygame import image, transform, Surface
 from typing import Tuple, List, Dict
 import json
+import pkg_resources
 
 
 
 class ImageHandler:
     """Class for handling game image loading and cropping"""
     def __init__(self):
-        self.checkers_img = Image.open("static/images/checkers.png")
+        self.checkers_img_path = pkg_resources.resource_filename('checkers_main', 'static/images/checkers.png')
+        self.checkers_img = Image.open(self.checkers_img_path)
         self._size : Tuple[int]
         self._size_small: Tuple[int]
-
+    
     def get_black_checker(self, size="normal") -> Surface:
         """Retuns a black checker image as a pygame surface"""
         if size == "small":
@@ -46,7 +48,7 @@ class ImageHandler:
 
 class ManHandler:
      
-     def _eval_men(self, cord: Tuple[int | float]) -> List[Tuple[int | float]]:
+    def _eval_men(self, cord: Tuple[int | float]) -> List[Tuple[int | float]]:
         """Checks and validates all possible moves for a given man piece"""
         possible_positions: List[Tuple[int | float]] = []
         if self._current_player == "p1":

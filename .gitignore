@@ -1,3 +1,5 @@
 .venv
 *.json
-checkers_imp_adv_code_proj.egg-info/
+checkers_imp_adv_coding_proj.egg-info/
+build/
+dist/
