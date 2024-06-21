@@ -10,7 +10,7 @@
 - Dependancies
 
 ## Introduction
-This project is comprised of 2 modules within the mypackage directory each responsible for handling thier respective features for the game, This project took around 20 - 25 hours to complete including research and experimentation with the pygame framework. This is my first time creating a project of this scale using pygame.
+This project is comprised of 2 modules within the mypackage directory each responsible for handling thier respective features for the game.This is my first time creating a project of this scale using pygame.
 
 ## Features
 - Graphical User Interface
@@ -23,98 +23,122 @@ This project is comprised of 2 modules within the mypackage directory each respo
 ### Installation from GitHub
 To install the application:
 
-Clone repository
+
+Create project directory(In Terminal)
 ```bash
-git clone https://github.com/ScreedVA/checkers-imp-adv-code-proj.git
+mkdir checkers-imp-adv-coding-proj-techscreed
 ```
 
-Move into repository directory
+Enter directory(In Terminal)
 ```bash
-cd checkers-imp-adv-code-proj
+cd checkers-imp-adv-coding-proj-techscreed
 ```
 
-Create virtual environment
+Clone repository(In Terminal)
+```bash
+git clone https://github.com/ScreedVA/checkers-imp-adv-coding-proj.git
+```
+
+Move into repository directory(In Terminal)
+```bash
+cd checkers-imp-adv-coding-proj
+```
+
+Create virtual environment (In Terminal)
 ```bash
 python -m venv .venv
 ```
 
-Activate virtual environment
+Activate virtual environment (In Terminal)
 ```bash
 .venv\Scripts\activate
 ```
 
-Install pip (if nessasary) 
+Update pip if nessasary (In Terminal) 
 ```bash
-python -m pip install --upgrade pip
+python.exe -m pip install --upgrade pip
 ```
 
-Install package locally
+Install package locally (In Terminal)
 ```bash
 pip install -e .
 ```
 ### Installation from Pypi
 
-Create project directory
+Create project directory (In Terminal)
 ```bash
-mkdir checkers-imp-adv-code-proj-techscreed
+mkdir checkers-imp-adv-coding-proj-techscreed
 ```
 
-Enter directory
+Enter directory (In Terminal)
 ```bash
 cd checkers-imp-adv-coding-proj-techscreed
 ```
 
-Create virtual environment
+Create virtual environment(In Terminal)
 ```bash
 python -m venv .venv
 ```
 
-Activate virtual environment
+Activate virtual environment(In Terminal)
 ```bash
 .venv\Scripts\activate
 ```
 
-Install package from Pypi
+Install package from Pypi(In Terminal)
 ```bash
 pip install checkers-imp-adv-coding-proj
 ```
 
-## Usage
-### Example 1
-Run application
+## Usage - After installed with pypi
+### Example 1 Running package with CLI Command
+Run application (In Terminal)
 ```bash
 run_checkers_round
 ```
 >  Output:
 You have no previous games, Starting round...
 
-### Example 2
-Run application
+### Example 2 Running package with executable file
+Create project directory (In Terminal)
 ```bash
-run_checkers_round
+mkdir checkers-imp-adv-coding-proj-techscreed
+```
+
+Enter project directory (In Terminal)
+```bash
+cd checkers-imp-adv-coding-proj-techscreed
+```
+
+Create file for execution and import main from checkers-main package (In Terminal)
+```bash
+echo > main.py "from checkers-main import main"
+```
+
+Call main function in main.py (In Script)
+```bash
+if __name__ == "__main__":
+    main()
+```
+
+Run application execution file (In Terminal)
+```bash
+python main.py
+```
+
+## Usage - if installed from GitHub
+### Example 2 Running package with executable file
+Enter repository directory if not already (In Terminal)
+```bash
+cd checkers-imp-adv-coding-proj
+```
+
+Run application execution file (In Terminal)
+```bash
+python main.py
 ```
 >  Output:
-Would you like to load(L) your previous game or start a new game(N)
-
-```bash
-N
-```
-> Output: 
-Starting new round...
-
-### Example 3
-Run application
-```bash
-run_checkers_round
-```
->  Output:
-Would you like to load(L) your previous game or start a new game(N)
-
-```bash
-L
-```
-> Output: 
-Loading previous round...
+You have no previous games, Starting round...
 
 
 ## Contact Info
