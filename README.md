@@ -11,7 +11,7 @@
 - References
 
 ## Introduction
-This is a package is an implementation of the well known checkers board game, and the rules are based on the international draughts guidelines. The checkers-main package consists of 2 modules utility and game each responsible for handling thier respective features for the game. This is my first time creating a project of this scale using pygame.
+This package is an implementation of the well known checkers board game, and the rules are based on the international draughts guidelines. The checkers-main package consists of 2 modules utility and game each responsible for handling thier respective features for the game. This is my first time creating a project of this scale using pygame.
 
 ## Features
 - Graphical User Interface
