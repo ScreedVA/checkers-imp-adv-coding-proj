@@ -8,9 +8,10 @@
 - Usage
 - Contact Info
 - Dependancies
+- References
 
 ## Introduction
-This project is comprised of 2 modules within the mypackage directory each responsible for handling thier respective features for the game.This is my first time creating a project of this scale using pygame.
+This is a package is an implementation of the well known checkers board game, and the rules are based on the international draughts guidelines. The checkers-main package consists of 2 modules utility and game each responsible for handling thier respective features for the game. This is my first time creating a project of this scale using pygame.
 
 ## Features
 - Graphical User Interface
@@ -64,7 +65,6 @@ Install package locally (In Terminal)
 pip install -e .
 ```
 ### Installation from Pypi
-
 Create project directory (In Terminal)
 ```bash
 mkdir checkers-imp-adv-coding-proj-techscreed
@@ -90,7 +90,8 @@ Install package from Pypi(In Terminal)
 pip install checkers-imp-adv-coding-proj
 ```
 
-## Usage - After installed with pypi
+## Usage - After Installed with Pypi
+> There are 2 ways you can run this package
 ### Example 1 Running package with CLI Command
 Run application (In Terminal)
 ```bash
@@ -99,7 +100,7 @@ run_checkers_round
 >  Output:
 You have no previous games, Starting round...
 
-### Example 2 Running package with executable file
+### Example 2 Running package through execution file
 Create project directory (In Terminal)
 ```bash
 mkdir checkers-imp-adv-coding-proj-techscreed
@@ -126,8 +127,8 @@ Run application execution file (In Terminal)
 python main.py
 ```
 
-## Usage - if installed from GitHub
-### Example 2 Running package with executable file
+## Usage - After Installed from GitHub
+### Example 2 Running package through execution file
 Enter repository directory if not already (In Terminal)
 ```bash
 cd checkers-imp-adv-coding-proj
@@ -151,7 +152,7 @@ You have no previous games, Starting round...
 - Json libary handles python dictionary to json serialization
 
 
-## Sources
+## References
 - The render_game_env() method which utilizes modular congruences to asses rows and columns to draw evenly positioned squares is inspired from an article by Sundar Sing - Singh, S. (2017, December 10). [D3: Modulo operation to create a grid.](https://medium.com/@eesur/d3-modulo-operation-to-create-a-grid-f47101831a ) 
 
 - The game images used throughout the project are by "andi" on [OpenGameart.ORG](https://opengameart.org/content/checkers) 
