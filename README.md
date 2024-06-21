@@ -114,7 +114,7 @@ cd checkers-imp-adv-coding-proj-techscreed
 
 Create file for execution and import main from checkers-main package (In Terminal)
 ```bash
-echo > main.py "from checkers-main import main"
+echo > main.py "from checkers_main import main"
 ```
 
 Call main function in main.py (In Script)
