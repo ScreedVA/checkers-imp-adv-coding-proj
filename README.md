@@ -60,10 +60,6 @@ Update pip if nessasary (In Terminal)
 python.exe -m pip install --upgrade pip
 ```
 
-Install package locally (In Terminal)
-```bash
-pip install -e .
-```
 ### Installation from Pypi
 Create project directory (In Terminal)
 ```bash
@@ -128,7 +124,7 @@ python main.py
 ```
 
 ## Usage - After Installed from GitHub
-### Example 2 Running package through execution file
+### Example 1 Running package through execution file
 Enter repository directory if not already (In Terminal)
 ```bash
 cd checkers-imp-adv-coding-proj
@@ -141,6 +137,20 @@ python main.py
 >  Output:
 You have no previous games, Starting round...
 
+## Example 2 Installing and Running Package locally with Egg files
+Enter repository directory if not already (In Terminal)
+```bash
+cd checkers-imp-adv-coding-proj
+```
+Install package locally (In Terminal)
+```bash
+pip install -e .
+```
+
+Run package locally with CLI command(In Terminal)
+```bash
+run_checkers_round
+```
 
 ## Contact Info
 [LinkedIn Profile](https://www.linkedin.com/in/christian-damete-yeboa-bb79442a3/)
