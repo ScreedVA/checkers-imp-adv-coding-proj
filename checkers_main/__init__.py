@@ -1,7 +1,7 @@
 from .game import GameBoard, GameCheckerStatus, GameInterface, GameControls
 import pygame
 
-__version__ = "0.1.8"
+__version__ = "0.1.9"
 
 
 def start(b_pos=[(2,0), (4, 0), (6, 0), (8, 0), (3, 1), (5, 1), (7, 1), (9, 1), (2, 2), (4, 2), (6, 2), (8, 2)], 

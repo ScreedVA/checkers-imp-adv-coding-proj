@@ -3,6 +3,8 @@ from typing import List, Tuple, Dict
 from checkers_main.utility import ImageHandler, KingHandler, RecordHandler
 import time
 import pkg_resources
+
+
 font.init()
 
 

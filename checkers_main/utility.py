@@ -3,14 +3,18 @@ from pygame import image, transform, Surface
 from typing import Tuple, List, Dict
 import json
 import pkg_resources
-
+import os
+import sys
 
 
 class ImageHandler:
     """Class for handling game image loading and cropping"""
     def __init__(self):
         self.checkers_img_path = pkg_resources.resource_filename('checkers_main', 'static/images/checkers.png')
-        self.checkers_img = Image.open(self.checkers_img_path)
+        try:
+             self.checkers_img = Image.open(self.checkers_img_path)
+        except Exception:
+             self.checkers_img = Image.open(resource_path("static/images/checkers.png"))
         self._size : Tuple[int]
         self._size_small: Tuple[int]
     
@@ -191,4 +195,11 @@ class RecordHandler:
         return False
     
         
+def resource_path(relative_path):
+    """ Get the absolute path to the resource, works for development and for PyInstaller """
+    try:
+        base_path = sys._MEIPASS
+    except AttributeError:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
