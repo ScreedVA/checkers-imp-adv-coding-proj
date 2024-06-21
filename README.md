@@ -60,6 +60,11 @@ Update pip if nessasary (In Terminal)
 python.exe -m pip install --upgrade pip
 ```
 
+Install package dependancies (In Terminal)
+```bash
+pip install -r requirements.txt
+```
+
 ### Installation from Pypi
 Create project directory (In Terminal)
 ```bash
