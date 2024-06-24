@@ -147,6 +147,7 @@ Enter repository directory if not already (In Terminal)
 ```bash
 cd checkers-imp-adv-coding-proj
 ```
+
 Install package locally (In Terminal)
 ```bash
 pip install -e .
@@ -163,7 +164,7 @@ run_checkers_round
 
 ## Dependancies
 - Pygame Framework handles graphical user interface functionality
-- Pillow Library is used for image manupluation and cropping
+- Pillow Library is used for image manipluation and cropping
 - Json libary handles python dictionary to json serialization
 
 

@@ -115,8 +115,6 @@ class GameBoard(ImageHandler):
         """Draw border for captured men view"""
         draw.rect(surface, self.get_border_color(), capt_pos_size, 3)
 
-
-
     def render_pieces(self, surface) -> None:
         """Renders each piece in CheckStatus.pos object lists, onto the board when called"""
         for i in range(len(self._bc.get_pos())):
@@ -346,7 +344,6 @@ class GameControls(KingHandler):
             self.lch["winner"] = "white(p2)"
     
          
-
     def get_player_2_cords(self) -> List[Tuple[int | float]]:
         return self._player_2_cords
 

@@ -10,6 +10,7 @@ import sys
 class ImageHandler:
     """Class for handling game image loading and cropping"""
     def __init__(self):
+        """Iniliaze ImageHandler attributes"""
         self.checkers_img_path = pkg_resources.resource_filename('checkers_main', 'static/images/checkers.png')
         try:
              self.checkers_img = Image.open(self.checkers_img_path)
@@ -196,7 +197,7 @@ class RecordHandler:
     
         
 def resource_path(relative_path):
-    """ Get the absolute path to the resource, works for development and for PyInstaller """
+    """ Get the absolute path to the resource """
     try:
         base_path = sys._MEIPASS
     except AttributeError:
